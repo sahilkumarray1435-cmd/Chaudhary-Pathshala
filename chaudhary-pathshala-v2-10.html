@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>चौधरी पाठशाला AI</title>
+<style>
+:root{
+  --g:#1B7A3E;--g2:#2EAD5C;--g3:#E8F9EE;
+  --s:#FF6B00;--s2:#FF9340;--s3:#FFF0E0;
+  --b:#1565C0;--b2:#1E88E5;--b3:#E3F2FD;
+  --p:#6A1B9A;--p2:#9C27B0;--p3:#F3E5F5;
+  --gold:#F9A825;--gold2:#FFF8E1;
+  --red:#C62828;--red2:#FFEBEE;
+  --dp:#0A1628;--dp2:#112240;
+  --white:#fff;--cream:#FFFBF5;
+  --gray:#F5F5F5;--gray2:#EEEEEE;
+  --text:#1A1A2E;--muted:#6B7280;
+  --border:#E5E7EB;
+  --font:'Segoe UI',Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#F0F4F8;font-family:var(--font);color:var(--text);}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:10px;}
+
+/* ── SCREENS ── */
+.screen{display:none;width:100%;height:100dvh;min-height:100vh;flex-direction:column;overflow:hidden;}
+.screen.on{display:flex;}
+
+/* ── LOGIN ── */
+#sLogin{
+  background:linear-gradient(145deg,#0A1628 0%,#1B5E20 55%,#E65100 100%);
+  align-items:center;justify-content:center;padding:20px;overflow-y:auto;
+}
+.lcard{background:var(--white);border-radius:24px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 32px 80px rgba(0,0,0,.3);animation:cIn .4s ease;}
+@keyframes cIn{from{opacity:0;transform:scale(.9) translateY(20px);}to{opacity:1;transform:none;}}
+.llogo{text-align:center;margin-bottom:18px;}
+.llogo .icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--s));display:inline-flex;align-items:center;justify-content:center;font-size:28px;}
+.llogo h1{font-size:17px;font-weight:800;margin-top:9px;}
+.llogo p{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.rtabs{display:flex;background:var(--gray);border-radius:11px;padding:4px;margin-bottom:18px;gap:3px;}
+.rtab{flex:1;padding:8px;border-radius:8px;border:none;background:transparent;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;text-align:center;}
+.rtab.active{background:var(--white);color:var(--text);box-shadow:0 1px 6px rgba(0,0,0,.08);}
+.fgrp{margin-bottom:13px;}
+.fgrp label{font-size:11.5px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;}
+.fgrp input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--font);font-size:14px;outline:none;background:var(--gray);transition:border-color .2s;}
+.fgrp input:focus{border-color:var(--g);background:var(--white);}
+.lbtn{width:100%;padding:13px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--g),var(--s));color:#fff;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;margin-top:2px;}
+.lbtn:active{opacity:.9;}
+.lhint{text-align:center;margin-top:12px;font-size:11px;color:var(--muted);background:var(--gray);padding:9px;border-radius:9px;line-height:1.7;}
+.lhint b{color:var(--g);}
+.lreg{text-align:center;margin-top:10px;font-size:12px;color:var(--b);cursor:pointer;font-weight:600;}
+
+/* ── SIDEBAR ── */
+.layout{display:flex;height:100dvh;min-height:100vh;overflow:hidden;}
+.sb{width:210px;background:var(--dp);display:flex;flex-direction:column;flex-shrink:0;}
+.sb-hdr{padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-logo{display:flex;align-items:center;gap:9px;}
+.sb-ic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--g),var(--s));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sb-t{color:#fff;font-size:13px;font-weight:800;}
+.sb-s{color:rgba(255,255,255,.4);font-size:10px;}
+.sb-nav{flex:1;overflow-y:auto;padding:7px;}
+.sb-sec{color:rgba(255,255,255,.28);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:9px 9px 4px;}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;transition:all .18s;margin-bottom:2px;white-space:nowrap;}
+.ni:hover{background:rgba(255,255,255,.07);}
+.ni.active{background:linear-gradient(135deg,rgba(27,122,62,.5),rgba(255,107,0,.3));}
+.ni .ic{font-size:16px;flex-shrink:0;width:19px;text-align:center;}
+.ni .lb{color:rgba(255,255,255,.75);font-size:12.5px;}
+.ni.active .lb{color:#fff;font-weight:700;}
+.sb-ft{padding:11px 9px;border-top:1px solid rgba(255,255,255,.07);}
+.sb-user{display:flex;align-items:center;gap:7px;}
+.sb-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--s));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.sb-un{color:rgba(255,255,255,.8);font-size:12px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-ur{color:rgba(255,255,255,.35);font-size:9.5px;}
+.sb-out{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.6);width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:13px;flex-shrink:0;}
+
+/* ── MAIN PANEL ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{background:var(--white);padding:11px 18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.tb-title{font-size:15px;font-weight:800;}
+.tb-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:9px;}
+.nb{position:relative;width:34px;height:34px;border-radius:9px;background:var(--gray);border:none;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.nb-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--white);display:none;}
+.nb-dot.on{display:block;}
+.content{flex:1;overflow-y:auto;padding:16px 18px;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:13px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.card-t{font-size:13.5px;font-weight:800;color:var(--text);margin-bottom:10px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px;}
+.scard{background:var(--white);border-radius:13px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);position:relative;overflow:hidden;}
+.scard::after{content:'';position:absolute;top:0;right:0;width:50px;height:50px;border-radius:0 13px 0 50px;opacity:.1;}
+.scard.gc::after{background:var(--g);}
+.scard.oc::after{background:var(--s);}
+.scard.bc::after{background:var(--b);}
+.scard.pc::after{background:var(--p);}
+.sn{font-size:26px;font-weight:900;margin-bottom:1px;}
+.sl{font-size:11px;color:var(--muted);font-weight:600;}
+.si{font-size:20px;margin-bottom:5px;}
+
+/* ── ACTIVITY ── */
+.ai{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);}
+.ai:last-child{border-bottom:none;}
+.ai-ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.ai-m{font-size:13px;color:var(--text);font-weight:500;line-height:1.4;}
+.ai-t{font-size:10px;color:var(--muted);margin-top:1px;}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{background:var(--gray);padding:8px 11px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+td{padding:9px 11px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+.pill{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;}
+.pill-g{background:var(--g3);color:var(--g);}
+.pill-r{background:var(--gray);color:var(--muted);}
+.odot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── BROADCAST ── */
+.bc-box{background:linear-gradient(135deg,var(--dp),var(--dp2));border-radius:13px;padding:16px;margin-bottom:12px;}
+.bc-box h3{color:#fff;font-size:13.5px;font-weight:700;margin-bottom:10px;}
+.bc-ta{width:100%;padding:11px 13px;border-radius:9px;border:none;background:rgba(255,255,255,.1);color:#fff;font-family:var(--font);font-size:13.5px;outline:none;margin-bottom:9px;resize:none;min-height:70px;}
+.bc-ta::placeholder{color:rgba(255,255,255,.3);}
+.bc-send{padding:10px 18px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--g2),var(--s2));color:#fff;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;}
+
+/* ── BAR CHART ── */
+.brow{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.blbl{font-size:11.5px;color:var(--muted);width:80px;flex-shrink:0;text-align:right;}
+.btrack{flex:1;background:var(--gray);border-radius:20px;height:9px;overflow:hidden;}
+.bfill{height:100%;border-radius:20px;transition:width .8s ease;}
+.bval{font-size:12px;font-weight:700;width:30px;flex-shrink:0;}
+
+/* ── TAGS ── */
+.tag{display:inline-block;padding:2px 8px;border-radius:7px;font-size:11px;font-weight:600;}
+.tag-g{background:var(--g3);color:var(--g);}
+.tag-o{background:var(--s3);color:var(--s);}
+.tag-b{background:var(--b3);color:var(--b);}
+
+/* ── FORMS ── */
+.if{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--font);font-size:13px;color:var(--text);background:var(--gray);outline:none;margin-bottom:8px;transition:border-color .2s;}
+.if:focus{border-color:var(--g);}
+select.if{cursor:pointer;}
+textarea.if{min-height:75px;resize:vertical;line-height:1.5;}
+.abtn{width:100%;padding:11px;border-radius:26px;border:none;font-family:var(--font);font-size:13.5px;font-weight:700;cursor:pointer;color:#fff;margin-top:3px;transition:opacity .2s;}
+.abtn:active{opacity:.85;}
+.bg{background:linear-gradient(135deg,var(--g),var(--g2));}
+.bo{background:linear-gradient(135deg,var(--s),#E65100);}
+.bb{background:linear-gradient(135deg,var(--b),var(--b2));}
+.bgold{background:linear-gradient(135deg,var(--gold),#F57F17);}
+.bred{background:var(--red);}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:24px 14px;color:var(--muted);}
+.empty .ei{font-size:34px;margin-bottom:7px;}
+.empty p{font-size:12.5px;line-height:1.6;}
+
+/* ── LB ── */
+.lbrow{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;background:var(--gray);margin-bottom:7px;}
+.lbrow.g1{background:var(--gold2);border:1.5px solid rgba(249,168,37,.3);}
+.lbrow.g2{background:#FAFAFA;border:1.5px solid var(--border);}
+.lbrow.g3{background:var(--s3);border:1.5px solid rgba(255,107,0,.2);}
+.lbrow.me{border:2px solid var(--g2);background:var(--g3);}
+.lbrk{font-size:16px;font-weight:900;width:22px;text-align:center;}
+.lbav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.lbnm{font-size:13px;font-weight:700;flex:1;}
+.lbsc{font-size:14px;font-weight:800;color:var(--s);}
+
+/* ════════════════════════
+   STUDENT APP
+════════════════════════ */
+#sStu{background:var(--cream);position:fixed;top:0;left:0;right:0;bottom:0;height:auto !important;}
+.stu{display:flex;position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:column;background:var(--white);overflow:hidden;}
+.shdr{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 55%,#FF6B00 100%);padding:11px 14px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.shdr-ic{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid rgba(255,255,255,.22);flex-shrink:0;}
+.shdr h1{color:#fff;font-size:13.5px;font-weight:800;}
+.shdr p{color:rgba(255,255,255,.6);font-size:9.5px;}
+.shdr-r{margin-left:auto;display:flex;align-items:center;gap:7px;}
+.snbadge{background:rgba(255,255,255,.15);color:#fff;padding:3px 9px;border-radius:10px;font-size:10.5px;font-weight:600;white-space:nowrap;max-width:100px;overflow:hidden;text-overflow:ellipsis;}
+.sout{background:rgba(255,255,255,.14);border:none;color:#fff;width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:12px;flex-shrink:0;}
+
+/* Broadcast banner */
+.bcb{background:linear-gradient(135deg,var(--dp),var(--b));color:#fff;padding:9px 13px;display:none;align-items:flex-start;gap:9px;border-bottom:2px solid var(--s);flex-shrink:0;}
+.bcb.on{display:flex;}
+.bcb-t{flex:1;font-size:12.5px;line-height:1.5;}
+.bcb-x{background:rgba(255,255,255,.18);border:none;color:#fff;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:11px;flex-shrink:0;}
+
+/* Tabs */
+.stabs{display:flex;background:var(--gray);border-bottom:2px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.stabs::-webkit-scrollbar{display:none;}
+.stab{flex:1;min-width:48px;padding:7px 2px;text-align:center;font-size:9.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;}
+.stab span{display:block;font-size:13px;margin-bottom:1px;}
+.stab.active{color:var(--s);border-bottom-color:var(--s);background:var(--white);}
+
+/* Student pages */
+.sp{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0;}
+.sp.active{display:flex;}
+.scrl{flex:1;overflow-y:auto;padding:11px 12px;background:var(--cream);min-height:0;}
+.scrl::-webkit-scrollbar{width:3px;}
+.scrl::-webkit-scrollbar-thumb{background:rgba(255,107,0,.2);border-radius:4px;}
+
+/* Chat */
+.ca{flex:1;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:9px;background:var(--cream);min-height:0;scroll-behavior:smooth;}
+.ca::-webkit-scrollbar{width:3px;}
+.ca::-webkit-scrollbar-thumb{background:rgba(255,107,0,.2);border-radius:4px;}
+.row{display:flex;gap:7px;animation:pop .3s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:none;}}
+.row.me{flex-direction:row-reverse;}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;font-weight:700;color:#fff;}
+.row.bot .av{background:linear-gradient(135deg,var(--g),var(--g2));}
+.row.me  .av{background:linear-gradient(135deg,var(--s),#E65100);}
+.bbl{max-width:83%;padding:9px 12px;border-radius:16px;font-size:13.5px;line-height:1.7;color:var(--text);}
+.row.bot .bbl{background:var(--white);border-bottom-left-radius:4px;border-left:3px solid var(--g2);box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.row.me  .bbl{background:linear-gradient(135deg,var(--s),#E65100);color:#fff;border-bottom-right-radius:4px;}
+.ts{font-size:9px;color:var(--muted);margin-top:2px;opacity:.6;}
+.row.me .ts{text-align:right;color:rgba(255,255,255,.5);}
+.typr{display:flex;gap:7px;}
+.typb{background:var(--white);border-radius:16px;border-bottom-left-radius:4px;border-left:3px solid var(--g2);padding:10px 14px;display:flex;gap:4px;align-items:center;}
+.td{width:6px;height:6px;border-radius:50%;background:var(--g2);animation:td 1.2s infinite;}
+.td:nth-child(2){animation-delay:.2s;background:var(--gold);}
+.td:nth-child(3){animation-delay:.4s;background:var(--s);}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
+
+/* Chips */
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 11px 3px;background:var(--cream);flex-shrink:0;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{white-space:nowrap;padding:5px 10px;border-radius:16px;background:var(--white);border:1.5px solid rgba(255,107,0,.2);color:var(--s);font-size:11px;cursor:pointer;flex-shrink:0;font-family:var(--font);}
+.chip:active{background:var(--s);color:#fff;}
+
+/* Message bubble overrides */
+.bbl.userMsg{background:linear-gradient(135deg,#1B7A3E,#2EAD5C) !important;color:#fff !important;}
+.bbl.aiMsg{background:var(--white);color:var(--text);}
+
+/* Input */
+.iw{padding:8px 11px 14px;background:var(--white);border-top:1px solid var(--border);display:flex;gap:7px;align-items:flex-end;flex-shrink:0;width:100%;}
+.mi{flex:1;background:var(--gray);border:1.5px solid rgba(255,107,0,.18);border-radius:20px;padding:9px 13px;font-family:var(--font);font-size:13.5px;color:var(--text);resize:none;outline:none;max-height:90px;min-height:40px;line-height:1.5;transition:border-color .2s;}
+.mi:focus{border-color:var(--s);}
+.mi:disabled{opacity:.5;}
+.sb2{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--g),var(--s));cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb2 svg{width:16px;height:16px;fill:#fff;}
+
+/* MCQ / Test */
+.tc{background:var(--white);border-radius:13px;padding:13px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.pbw{background:var(--gray2);border-radius:10px;height:6px;margin-bottom:11px;overflow:hidden;}
+.pb{background:linear-gradient(90deg,var(--g),var(--s));height:100%;border-radius:10px;transition:width .4s;}
+.qn{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;}
+.qt{font-size:13.5px;font-weight:600;color:var(--dp);margin-bottom:11px;line-height:1.6;}
+.to{width:100%;padding:10px 13px;margin-bottom:6px;border-radius:9px;border:1.5px solid var(--border);background:var(--gray);text-align:left;font-family:var(--font);font-size:13px;color:var(--text);cursor:pointer;transition:all .15s;}
+.to.right{background:var(--g3);border-color:var(--g2);color:var(--g);}
+.to.wrong{background:var(--red2);border-color:#EF9A9A;color:var(--red);}
+.to:disabled{cursor:not-allowed;}
+.tex{background:var(--gold2);border-radius:9px;padding:10px;font-size:12.5px;line-height:1.7;color:var(--dp);border-left:3px solid var(--gold);margin-top:6px;display:none;}
+.tex.on{display:block;}
+.nxb{width:100%;padding:11px;border-radius:26px;border:none;font-family:var(--font);font-size:13.5px;font-weight:700;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--s),#E65100);margin-top:8px;display:none;}
+.nxb.on{display:block;}
+.res{text-align:center;padding:18px 12px;}
+.rtr{font-size:48px;}
+.rsc{font-size:36px;font-weight:900;color:var(--s);margin:7px 0;}
+.rmsg{font-size:13px;color:var(--muted);margin-bottom:14px;}
+.rbars{display:flex;gap:7px;margin-bottom:13px;}
+.rb{flex:1;border-radius:9px;padding:10px;text-align:center;}
+.rbn{font-size:19px;font-weight:800;}
+.rbl{font-size:10px;color:var(--muted);margin-top:1px;}
+
+/* Note */
+.nc{background:var(--gold2);border-radius:12px;padding:12px 13px;margin-bottom:8px;border-left:3px solid var(--gold);}
+.nt{font-size:13px;font-weight:700;color:var(--dp);margin-bottom:3px;}
+.nb2{font-size:12.5px;color:var(--text);line-height:1.65;white-space:pre-wrap;}
+.nm{font-size:10px;color:var(--muted);margin-top:4px;}
+
+/* TTS & Language buttons */
+.tts-btn,.lang-btn{
+  padding:5px 10px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--gray);cursor:pointer;font-size:12px;font-weight:700;
+  color:var(--text);transition:all .18s;white-space:nowrap;
+}
+.tts-btn:active,.lang-btn:active{background:var(--g3);}
+.tts-btn{min-width:34px;}
+
+/* Toast */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#323232;color:#fff;padding:8px 18px;border-radius:26px;font-size:13px;z-index:9999;animation:tIn .25s ease;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.25);}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(7px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div class="screen on" id="sLogin">
+<div class="lcard">
+  <div class="llogo">
+    <div class="icon">🏫</div>
+    <h1>चौधरी पाठशाला AI</h1>
+    <p>Director Control System</p>
+  </div>
+  <div class="rtabs">
+    <button class="rtab active" onclick="setRole('director',this)">🎯 Director</button>
+    <button class="rtab" onclick="setRole('teacher',this)">👩‍🏫 Teacher</button>
+    <button class="rtab" onclick="setRole('student',this)">👨‍🎓 Student</button>
+  </div>
+  <div class="fgrp">
+    <label>Username</label>
+    <input id="luname" type="text" placeholder="Username दर्ज करें" value="director"/>
+  </div>
+  <div class="fgrp">
+    <label>Password</label>
+    <input id="lpass" type="password" placeholder="Password दर्ज करें" value="director123"/>
+  </div>
+  <button class="lbtn" onclick="doLogin()">🔐 Login करें</button>
+  <div class="lhint" id="lhint">
+    <b>Director:</b> director / director123<br>
+    <b>Teacher:</b> Director से login credentials लें
+  </div>
+  <div class="lreg" id="lreg" style="display:none" onclick="doRegister()">नया Student? Register करें →</div>
+</div>
+</div>
+
+<!-- ══ DIRECTOR ══ -->
+<div class="screen" id="sDir">
+<div class="layout">
+  <div class="sb">
+    <div class="sb-hdr">
+      <div class="sb-logo">
+        <div class="sb-ic">🏫</div>
+        <div><div class="sb-t">Pathshala AI</div><div class="sb-s">Director Panel</div></div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-sec">OVERVIEW</div>
+      <div class="ni active" onclick="dPage('dash',this)"><span class="ic">📊</span><span class="lb">Dashboard</span></div>
+      <div class="ni" onclick="dPage('activity',this)"><span class="ic">⚡</span><span class="lb">Activity Feed</span></div>
+      <div class="ni" onclick="dPage('analytics',this)"><span class="ic">📈</span><span class="lb">Analytics</span></div>
+      <div class="sb-sec">MANAGE</div>
+      <div class="ni" onclick="dPage('students',this)"><span class="ic">👨‍🎓</span><span class="lb">Students</span></div>
+      <div class="ni" onclick="dPage('teachers',this)"><span class="ic">👩‍🏫</span><span class="lb">Teachers</span></div>
+      <div class="ni" onclick="dPage('mcqbank',this)"><span class="ic">📝</span><span class="lb">MCQ Bank</span></div>
+      <div class="ni" onclick="dPage('noteslib',this)"><span class="ic">📖</span><span class="lb">Notes</span></div>
+      <div class="sb-sec">COMMUNICATE</div>
+      <div class="ni" onclick="dPage('broadcast',this)"><span class="ic">📢</span><span class="lb">Broadcast</span></div>
+      <div class="ni" onclick="dPage('leaderboard',this)"><span class="ic">🏆</span><span class="lb">Leaderboard</span></div>
+      <div class="sb-sec">SYSTEM</div>
+      <div class="ni" onclick="dPage('settings',this)"><span class="ic">⚙️</span><span class="lb">Settings</span></div>
+    </div>
+    <div class="sb-ft">
+      <div class="sb-user">
+        <div class="sb-av" id="dav">D</div>
+        <div><div class="sb-un" id="dname">Director</div><div class="sb-ur">Administrator</div></div>
+        <button class="sb-out" onclick="doLogout()">↩</button>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div><div class="tb-title" id="dpTitle">Dashboard</div><div class="tb-sub">Real-time overview</div></div>
+      <div class="tb-right">
+        <button class="lang-btn" id="dirLangBtn" onclick="toggleLang()" title="Language Toggle">🌐 EN</button>
+        <button class="tts-btn" id="dirTtsBtn" onclick="toggleTTS()" title="Text to Speech">🔊</button>
+        <button class="nb" onclick="dPage('activity',document.querySelectorAll('#sDir .ni')[1])">🔔<div class="nb-dot" id="ndot"></div></button>
+        <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--g),var(--s));display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700;" id="dav2">D</div>
+      </div>
+    </div>
+    <div class="content" id="dcontent"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══ TEACHER ══ -->
+<div class="screen" id="sTea">
+<div class="layout">
+  <div class="sb">
+    <div class="sb-hdr">
+      <div class="sb-logo">
+        <div class="sb-ic">👩‍🏫</div>
+        <div><div class="sb-t">Teacher Panel</div><div class="sb-s">Pathshala AI</div></div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-sec">CONTENT</div>
+      <div class="ni active" onclick="tPage('tdash',this)"><span class="ic">📊</span><span class="lb">Dashboard</span></div>
+      <div class="ni" onclick="tPage('addmcq',this)"><span class="ic">📝</span><span class="lb">MCQ बनाएं</span></div>
+      <div class="ni" onclick="tPage('addnote',this)"><span class="ic">📖</span><span class="lb">Notes Upload</span></div>
+      <div class="ni" onclick="tPage('tannounce',this)"><span class="ic">📢</span><span class="lb">Announcement</span></div>
+      <div class="ni" onclick="tPage('tstudents',this)"><span class="ic">👨‍🎓</span><span class="lb">Students</span></div>
+    </div>
+    <div class="sb-ft">
+      <div class="sb-user">
+        <div class="sb-av" id="tav">T</div>
+        <div><div class="sb-un" id="tname">Teacher</div><div class="sb-ur">Faculty</div></div>
+        <button class="sb-out" onclick="doLogout()">↩</button>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div><div class="tb-title" id="tpTitle">Teacher Dashboard</div></div>
+      <div class="tb-right">
+        <button class="lang-btn" onclick="toggleLang()" title="Language Toggle">🌐 EN</button>
+        <button class="tts-btn" onclick="toggleTTS()" title="Text to Speech">🔊</button>
+        <button class="nb">🔔</button>
+      </div>
+    </div>
+    <div class="content" id="tcontent"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══ STUDENT ══ -->
+<div class="screen" id="sStu">
+<div class="stu">
+  <div class="bcb" id="bcb">
+    <div style="font-size:16px;flex-shrink:0;">📢</div>
+    <div class="bcb-t" id="bcbt"></div>
+    <button class="bcb-x" onclick="document.getElementById('bcb').classList.remove('on')">✕</button>
+  </div>
+  <div class="shdr">
+    <div class="shdr-ic">🏫</div>
+    <div>
+      <h1>चौधरी पाठशाला AI</h1>
+      <p>24×7 AI शिक्षक • मुफ़्त</p>
+    </div>
+    <div class="shdr-r">
+      <button class="sout" style="font-size:11px;width:auto;padding:0 7px;" onclick="toggleLang()" id="stuLangBtn">🌐 EN</button>
+      <button class="sout" onclick="toggleTTS()" id="stuTtsBtn" title="Voice On/Off">🔊</button>
+      <div class="snbadge" id="snbadge">Student</div>
+      <button class="sout" onclick="doLogout()">↩</button>
+    </div>
+  </div>
+  <div class="stabs">
+    <div class="stab active" onclick="sTab('chat',this)"><span>💬</span>Chat</div>
+    <div class="stab" onclick="sTab('test',this)"><span>📝</span>Test</div>
+    <div class="stab" onclick="sTab('notes',this)"><span>📖</span>Notes</div>
+    <div class="stab" onclick="sTab('rank',this)"><span>🏆</span>Rank</div>
+    <div class="stab" onclick="sTab('prof',this)"><span>👤</span>Profile</div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="sp active" id="sp-chat">
+    <div class="ca" id="chatArea"></div>
+    <div class="chips">
+      <button class="chip" onclick="qa('Quadratic Equation समझाओ')">📐 Quadratic</button>
+      <button class="chip" onclick="qa('Photosynthesis क्या है?')">🌿 Photo.</button>
+      <button class="chip" onclick="qa('Newton के 3 laws')">⚡ Newton</button>
+      <button class="chip" onclick="qa('NEET tips दो')">🎯 NEET</button>
+      <button class="chip" onclick="qa('मुझे motivate करो')">💪 Motivate</button>
+      <button class="chip" onclick="qa('Daily Quiz दो')">🎯 Quiz</button>
+    </div>
+    <div class="iw">
+      <!-- Camera/Image input for doubt -->
+      <label for="imgInp" style="cursor:pointer;flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--gray);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:17px;" title="Photo से doubt भेजें">📷</label>
+      <input type="file" id="imgInp" accept="image/*" capture="environment" style="display:none;" onchange="sendImage(this)"/>
+      <textarea class="mi" id="mi" placeholder="कोई भी सवाल पूछें..." rows="1"
+        onkeydown="onKey(event)" oninput="resizeInp(this)"></textarea>
+      <button class="sb2" id="sb2" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- TEST -->
+  <div class="sp" id="sp-test">
+    <div class="scrl" id="testPg">
+      <div id="tSetup">
+        <div class="tc">
+          <div style="font-size:14px;font-weight:800;margin-bottom:10px;">📝 Test शुरू करें</div>
+          <select class="if" id="tSubj"><option value="all">🎯 सभी विषय</option></select>
+          <select class="if" id="tCnt">
+            <option value="5">5 प्रश्न</option>
+            <option value="10" selected>10 प्रश्न</option>
+            <option value="15">15 प्रश्न</option>
+            <option value="all">सभी</option>
+          </select>
+          <button class="abtn bg" onclick="startTest()">🚀 Test शुरू करें</button>
+        </div>
+        <div class="tc"><div style="font-size:13px;font-weight:700;margin-bottom:8px;">📋 पिछले Tests</div><div id="pastT"></div></div>
+      </div>
+      <div id="tActive" style="display:none">
+        <div class="tc">
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+            <span style="font-size:11px;color:var(--muted);font-weight:700;" id="tslbl"></span>
+            <span style="font-size:12px;font-weight:700;color:var(--s);" id="tprog">1/10</span>
+          </div>
+          <div class="pbw"><div class="pb" id="tpb" style="width:10%"></div></div>
+          <div id="tqarea"></div>
+          <button class="nxb" id="nxb" onclick="nextQ()">अगला →</button>
+        </div>
+      </div>
+      <div id="tResult" style="display:none">
+        <div class="tc">
+          <div class="res">
+            <div class="rtr" id="rtr">🏆</div>
+            <div class="rsc" id="rsc">0/0</div>
+            <div class="rmsg" id="rmsg">—</div>
+            <div class="rbars">
+              <div class="rb" style="background:var(--g3)"><div class="rbn" style="color:var(--g)" id="rco">0</div><div class="rbl">✅ सही</div></div>
+              <div class="rb" style="background:var(--red2)"><div class="rbn" style="color:var(--red)" id="rwo">0</div><div class="rbl">❌ गलत</div></div>
+              <div class="rb" style="background:var(--gold2)"><div class="rbn" style="color:var(--gold)" id="rpt">0%</div><div class="rbl">📊 Score</div></div>
+            </div>
+            <div style="display:flex;gap:7px;">
+              <button class="abtn bg" style="flex:1" onclick="saveScore()">🏆 Rank Save</button>
+              <button class="abtn bo" style="flex:1" onclick="resetTest()">🔄 फिर Test</button>
+            </div>
+          </div>
+        </div>
+        <div id="wrongRev"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="sp" id="sp-notes">
+    <div class="scrl">
+      <input style="width:100%;padding:9px 13px;border:1.5px solid rgba(255,107,0,.2);border-radius:11px;font-family:var(--font);font-size:13px;outline:none;margin-bottom:11px;background:var(--white);"
+        placeholder="🔍 Notes खोजें..." oninput="filterNotes(this.value)" id="nsearch"/>
+      <div id="notesArea"></div>
+    </div>
+  </div>
+
+  <!-- RANK -->
+  <div class="sp" id="sp-rank">
+    <div class="scrl">
+      <div style="background:linear-gradient(135deg,#1B5E20,#FF6B00);border-radius:13px;padding:14px;margin-bottom:11px;text-align:center;">
+        <div style="font-size:24px;">🏆</div>
+        <div style="color:#fff;font-size:15px;font-weight:800;margin-top:3px;">Leaderboard</div>
+        <div style="display:flex;gap:7px;margin-top:11px;">
+          <div style="flex:1;background:rgba(255,255,255,.15);border-radius:9px;padding:8px;text-align:center;"><div style="color:#fff;font-size:17px;font-weight:900;" id="myRnk">-</div><div style="color:rgba(255,255,255,.6);font-size:9.5px;">मेरी Rank</div></div>
+          <div style="flex:1;background:rgba(255,255,255,.15);border-radius:9px;padding:8px;text-align:center;"><div style="color:#fff;font-size:17px;font-weight:900;" id="myBst">-</div><div style="color:rgba(255,255,255,.6);font-size:9.5px;">Best Score</div></div>
+          <div style="flex:1;background:rgba(255,255,255,.15);border-radius:9px;padding:8px;text-align:center;"><div style="color:#fff;font-size:17px;font-weight:900;" id="totStu">0</div><div style="color:rgba(255,255,255,.6);font-size:9.5px;">Students</div></div>
+        </div>
+      </div>
+      <div id="lbArea"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="sp" id="sp-prof">
+    <div class="scrl">
+      <div class="tc">
+        <div style="font-size:13.5px;font-weight:700;margin-bottom:9px;">👤 My Profile</div>
+        <input class="if" id="spn" placeholder="नाम"/>
+        <select class="if" id="spc">
+          <option>Class 9</option><option>Class 10</option>
+          <option>Class 11</option><option>Class 12</option>
+          <option>NEET Aspirant</option><option>JEE Aspirant</option>
+        </select>
+        <input class="if" id="spg" placeholder="लक्ष्य (NEET 2025...)"/>
+        <button class="abtn bg" onclick="saveSProf()">💾 Save करें</button>
+      </div>
+      <div class="tc">
+        <div style="font-size:13.5px;font-weight:700;margin-bottom:9px;">📊 Statistics</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
+          <div style="background:var(--gray);border-radius:9px;padding:9px;text-align:center;"><div style="font-size:19px;font-weight:800;color:var(--s);" id="stQ">0</div><div style="font-size:9.5px;color:var(--muted);">Questions</div></div>
+          <div style="background:var(--gray);border-radius:9px;padding:9px;text-align:center;"><div style="font-size:19px;font-weight:800;color:var(--g);" id="stT">0</div><div style="font-size:9.5px;color:var(--muted);">Tests</div></div>
+          <div style="background:var(--gray);border-radius:9px;padding:9px;text-align:center;"><div style="font-size:19px;font-weight:800;color:var(--b);" id="stB">0%</div><div style="font-size:9.5px;color:var(--muted);">Best</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   ⚙️  FIREBASE CONFIG — यहाँ अपना URL डालें
+   Steps:
+   1. firebase.google.com → Create project (free)
+   2. Realtime Database → Create → Test mode
+   3. नीचे FIREBASE_URL में अपना URL डालें
+   Example: https://my-app-default-rtdb.firebaseio.com
+═══════════════════════════════════════════════════ */
+const FIREBASE_URL = 'https://chaudhary-pathshala-ai-50db0-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+/* ═══ LOCAL FALLBACK (अगर Firebase न हो) ═══ */
+const SK = 'cpai_v4';
+['cpai_v3','cpai_v2','cpai_v1','cp_system','cp_system_v2','cp_db'].forEach(k=>localStorage.removeItem(k));
+
+let db = {
+  users:[
+    {id:1,role:'director',uname:'director',pass:'director123',name:'Director',class:''}
+  ],
+  mcqs:[],notes:[],leaderboard:[],
+  activityLog:[],broadcasts:[],
+  coaching:{name:'चौधरी पाठशाला',city:'',classes:'8-12'},
+  stats:{totalStudents:0,onlineNow:0,todayQ:0,testsToday:0}
+};
+
+let dbReady = false;
+let saveTimer = null;
+
+/* ═══ FIREBASE FUNCTIONS ═══ */
+async function firebaseGet() {
+  if (!FIREBASE_URL) return null;
+  try {
+    const r = await fetch(FIREBASE_URL + '/pathshala.json', { method: 'GET' });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { console.warn('Firebase GET error:', e); return null; }
+}
+
+async function firebasePut(data) {
+  if (!FIREBASE_URL) return;
+  try {
+    await fetch(FIREBASE_URL + '/pathshala.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.warn('Firebase PUT error:', e); }
+}
+
+/* ═══ LOAD DB ═══ */
+async function loadDB() {
+  // Show loading
+  showDBStatus('⏳ Data load हो रहा है...');
+
+  // Try Firebase first
+  if (FIREBASE_URL) {
+    const data = await firebaseGet();
+    if (data) {
+      applyDBData(data);
+      dbReady = true;
+      showDBStatus('');
+      console.log('✅ Firebase data loaded');
+      return;
+    }
+  }
+
+  // Fallback to localStorage
+  try {
+    const r = localStorage.getItem(SK);
+    if (r) {
+      const p = JSON.parse(r);
+      applyDBData(p);
+    }
+  } catch(e) {}
+  dbReady = true;
+  showDBStatus('');
+
+  if (!FIREBASE_URL) {
+    console.warn('⚠️ Firebase not configured. Using localStorage (not cross-device).');
+  }
+}
+
+function applyDBData(p) {
+  const users = (p.users || db.users).filter(u =>
+    !(u.role === 'teacher' && (u.uname === 'teacher' || u.name === 'Teacher'))
+  );
+  db.users       = users.length ? users : db.users;
+  db.mcqs        = p.mcqs         || [];
+  db.notes       = p.notes        || [];
+  db.leaderboard = p.leaderboard  || [];
+  db.activityLog = (p.activityLog || []).slice(-100);
+  db.broadcasts  = p.broadcasts   || [];
+  db.coaching    = p.coaching     || db.coaching;
+  db.stats       = p.stats        || db.stats;
+}
+
+/* ═══ SAVE DB — debounced ═══ */
+function saveDB() {
+  // Always save to localStorage (instant)
+  try { localStorage.setItem(SK, JSON.stringify(db)); } catch(e) {}
+
+  // Debounce Firebase save (max once per 1.5 sec)
+  if (!FIREBASE_URL) return;
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    await firebasePut(db);
+  }, 1500);
+}
+
+/* ═══ REAL-TIME POLLING (every 8 sec) ═══ */
+function startRealTimeSync() {
+  if (!FIREBASE_URL) return;
+  setInterval(async () => {
+    const data = await firebaseGet();
+    if (!data) return;
+    // Only update if data changed (check activityLog length)
+    const remoteActs = (data.activityLog || []).length;
+    const localActs  = (db.activityLog  || []).length;
+    if (remoteActs !== localActs || (data.users||[]).length !== (db.users||[]).length) {
+      applyDBData(data);
+      // Re-render active director page if open
+      const dirContent = document.getElementById('dcontent');
+      if (dirContent && dirContent.innerHTML) {
+        const activeNav = document.querySelector('#sDir .ni.active');
+        if (activeNav) {
+          const pg = activeNav.querySelector('.lb')?.textContent?.toLowerCase()
+            .replace(/\s+/g,'').replace('dashboard','dash')
+            .replace('activityfeed','activity')
+            .replace('mcqbank','mcqbank')
+            .replace('noteslibrary','noteslib');
+          if (pg) dPage(pg, activeNav);
+        }
+      }
+      // Update student LB if open
+      const lbArea = document.getElementById('lbArea');
+      if (lbArea) renderLB();
+    }
+  }, 8000);
+}
+
+/* ═══ STATUS INDICATOR ═══ */
+function showDBStatus(msg) {
+  let el = document.getElementById('dbStatus');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'dbStatus';
+    el.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);background:#323232;color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;z-index:9999;transition:opacity .3s;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = msg ? '1' : '0';
+  if (!msg) setTimeout(() => el.remove(), 400);
+}
+
+/* ═══ INIT ═══ */
+loadDB().then(() => {
+  startRealTimeSync();
+  // Refresh UI after data loads
+  setTimeout(() => {
+    const activeDir = document.querySelector('#sDir .ni.active');
+    if (document.getElementById('sDir').classList.contains('on') && activeDir) {
+      dPage('dash', activeDir);
+    }
+  }, 500);
+});
+
+/* ═══ HELPERS ═══ */
+function nt(){return new Date().toLocaleTimeString('hi-IN',{hour:'2-digit',minute:'2-digit'});}
+function nd(){return new Date().toLocaleDateString('hi-IN');}
+function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function rclr(){const c=['#1B7A3E','#1565C0','#FF6B00','#7B1FA2','#C62828','#F57F17'];return c[Math.floor(Math.random()*c.length)];}
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function logAct(type,student,cls,msg,icon,color){
+  db.activityLog.push({id:Date.now(),type,student,class:cls,msg,time:nt(),icon,color});
+  if(db.activityLog.length>150)db.activityLog=db.activityLog.slice(-150);
+  saveDB();
+  const nd=document.getElementById('ndot');
+  if(nd)nd.classList.add('on');
+}
+
+/* ═══ AUTH ═══ */
+let CU=null, selRole='director';
+
+function setRole(r,btn){
+  selRole=r;
+  document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const h={director:'director / director123',teacher:'teacher / teacher123',student:'पहले Register करें'};
+  document.getElementById('lhint').innerHTML='<b>'+r.charAt(0).toUpperCase()+r.slice(1)+':</b> '+h[r];
+  document.getElementById('luname').value=r==='director'?'director':r==='teacher'?'teacher':'';
+  document.getElementById('lpass').value=r==='director'?'director123':r==='teacher'?'teacher123':'';
+  document.getElementById('lreg').style.display=r==='student'?'block':'none';
+}
+
+function doLogin(){
+  const u=document.getElementById('luname').value.trim();
+  const p=document.getElementById('lpass').value.trim();
+  if(!u||!p){toast('⚠️ Username और Password डालें');return;}
+  const user=db.users.find(x=>x.uname===u&&x.pass===p&&x.role===selRole);
+  if(!user){toast('❌ गलत Username या Password');return;}
+  CU=user;
+  logAct('login',user.name,user.class||'',user.name+' ने login किया','👋','#E8F9EE');
+  if(user.role==='director')launchDir();
+  else if(user.role==='teacher')launchTea();
+  else launchStu();
+}
+
+function doRegister(){
+  const name=prompt('आपका नाम:');if(!name)return;
+  const cls=prompt('कक्षा (Class 10):');if(!cls)return;
+  const u=prompt('Username बनाएं:');if(!u)return;
+  const p=prompt('Password बनाएं:');if(!p)return;
+  if(db.users.find(x=>x.uname===u)){toast('❌ Username पहले से लिया हुआ है');return;}
+  const nu={id:Date.now(),role:'student',uname:u,pass:p,name,class:cls,enrolled:'CP'+String(Date.now()).slice(-4),stats:{q:0,t:0,best:0}};
+  db.users.push(nu);
+  db.stats.totalStudents=db.users.filter(x=>x.role==='student').length;
+  saveDB();
+  logAct('register',name,cls,'नया student register हुआ: '+name,'👤','#F3E5F5');
+  toast('✅ Registration हो गया! Login करें।');
+}
+
+function doLogout(){
+  CU=null;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sLogin').classList.add('on');
+}
+
+/* ═══════════════ DIRECTOR ═══════════════ */
+function launchDir(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sDir').classList.add('on');
+  const a=CU.name.charAt(0).toUpperCase();
+  document.getElementById('dav').textContent=a;
+  document.getElementById('dav2').textContent=a;
+  document.getElementById('dname').textContent=CU.name;
+  dPage('dash',document.querySelector('#sDir .ni'));
+}
+
+function dPage(pg,el){
+  document.querySelectorAll('#sDir .ni').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const titles={dash:'Dashboard',activity:'Activity Feed',analytics:'Analytics',students:'Students',teachers:'Teachers',mcqbank:'MCQ Bank',noteslib:'Notes Library',broadcast:'Broadcast',leaderboard:'Leaderboard',settings:'Settings'};
+  document.getElementById('dpTitle').textContent=titles[pg]||pg;
+  document.getElementById('ndot').classList.remove('on');
+  const fns={dash:rDash,activity:rActivity,analytics:rAnalytics,students:rStudents,teachers:rTeachers,mcqbank:rMCQBank,noteslib:rNotesLib,broadcast:rBroadcast,leaderboard:rDirLB,settings:rSettings};
+  if(fns[pg])document.getElementById('dcontent').innerHTML=fns[pg]();
+}
+
+function rDash(){
+  const stus=db.users.filter(u=>u.role==='student');
+  const s=db.stats;
+  return`
+  <div class="stat-grid">
+    <div class="scard gc"><div class="si">👨‍🎓</div><div class="sn" style="color:var(--g)">${stus.length}</div><div class="sl">कुल Students</div></div>
+    <div class="scard oc"><div class="si">🟢</div><div class="sn" style="color:var(--s)">${s.onlineNow}</div><div class="sl">अभी Online</div></div>
+    <div class="scard bc"><div class="si">💬</div><div class="sn" style="color:var(--b)">${s.todayQ}</div><div class="sl">आज के Questions</div></div>
+    <div class="scard pc"><div class="si">📝</div><div class="sn" style="color:var(--p)">${s.testsToday}</div><div class="sl">Tests आज</div></div>
+  </div>
+  <div class="card"><div class="card-t">⚡ Recent Activity</div>
+    ${db.activityLog.length?db.activityLog.slice().reverse().slice(0,6).map(a=>`
+      <div class="ai">
+        <div class="ai-ic" style="background:${a.color}">${a.icon}</div>
+        <div><div class="ai-m">${esc(a.msg)}</div><div class="ai-t">${a.time}${a.student?' • '+esc(a.student):''}</div></div>
+      </div>`).join(''):'<div class="empty"><div class="ei">⚡</div><p>कोई activity नहीं</p></div>'}
+  </div>
+  <div class="card"><div class="card-t">📊 Subject-wise Questions</div>
+    ${(()=>{
+      const qs=db.activityLog.filter(a=>a.type==='question');
+      if(!qs.length)return'<div class="empty"><div class="ei">📊</div><p>अभी कोई data नहीं</p></div>';
+      const cnt={};qs.forEach(a=>{if(a.subject)cnt[a.subject]=(cnt[a.subject]||0)+1;});
+      const max=Math.max(...Object.values(cnt))||1;
+      const clr={'Physics':'#1E88E5','Biology':'#2EAD5C','Chemistry':'#FF9340','Mathematics':'#9C27B0','History':'#F9A825'};
+      return'<div>'+Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([s,v])=>`
+        <div class="brow"><div class="blbl">${esc(s)}</div><div class="btrack"><div class="bfill" style="width:${Math.round(v/max*100)}%;background:${clr[s]||'#607D8B'}"></div></div><div class="bval">${v}</div></div>`).join('')+'</div>';
+    })()}
+  </div>
+  <div class="card"><div class="card-t">🏆 Top Students</div>
+    ${db.leaderboard.length?[...db.leaderboard].sort((a,b)=>b.pct-a.pct).slice(0,3).map((e,i)=>`
+      <div class="ai">
+        <div class="ai-ic" style="background:${['#FFF8E1','#F5F5F5','#FFF0E0'][i]};font-size:18px;">${['🥇','🥈','🥉'][i]}</div>
+        <div style="flex:1"><div class="ai-m"><b>${esc(e.name)}</b> — ${esc(e.subject)}</div><div class="ai-t">${esc(e.class)}</div></div>
+        <div style="font-size:15px;font-weight:800;color:var(--s)">${e.pct}%</div>
+      </div>`).join(''):'<div class="empty"><div class="ei">🏆</div><p>Test results यहाँ दिखेंगे</p></div>'}
+  </div>`;
+}
+
+function rActivity(){
+  return`<div class="card"><div class="card-t">⚡ Live Activity Feed</div>
+    ${db.activityLog.length?db.activityLog.slice().reverse().map(a=>`
+      <div class="ai">
+        <div class="ai-ic" style="background:${a.color};font-size:15px">${a.icon}</div>
+        <div><div class="ai-m">${esc(a.msg)}<span class="tag tag-g" style="margin-left:5px;font-size:9.5px">${a.type}</span></div><div class="ai-t">${a.time}${a.student?' • '+esc(a.student):''}</div></div>
+      </div>`).join(''):'<div class="empty"><div class="ei">⚡</div><p>कोई activity नहीं है</p></div>'}
+  </div>`;
+}
+
+function rAnalytics(){
+  const qs=db.activityLog.filter(a=>a.type==='question').length;
+  const ts=db.activityLog.filter(a=>a.type==='test').length;
+  const stus=db.users.filter(u=>u.role==='student');
+  return`
+  <div class="card">
+    <div class="card-t">📊 Usage Stats</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px">
+      <div style="background:var(--g3);border-radius:9px;padding:11px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--g)">${qs}</div><div style="font-size:11px;color:var(--muted)">Total Questions</div></div>
+      <div style="background:var(--b3);border-radius:9px;padding:11px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--b)">${ts}</div><div style="font-size:11px;color:var(--muted)">Tests Taken</div></div>
+      <div style="background:var(--s3);border-radius:9px;padding:11px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--s)">${db.mcqs.length}</div><div style="font-size:11px;color:var(--muted)">MCQs in Bank</div></div>
+      <div style="background:var(--p3);border-radius:9px;padding:11px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--p)">${db.notes.length}</div><div style="font-size:11px;color:var(--muted)">Notes Available</div></div>
+    </div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:9px">Registered Students</div>
+    ${stus.length?stus.slice(0,8).map(s=>`
+      <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--s));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">${s.name.charAt(0)}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">${esc(s.name)}</div><div style="font-size:10.5px;color:var(--muted)">${esc(s.class||'—')} • ${esc(s.enrolled||'—')}</div></div>
+      </div>`).join(''):'<div class="empty"><div class="ei">👨‍🎓</div><p>कोई student नहीं</p></div>'}
+  </div>`;
+}
+
+function rStudents(){
+  const stus=db.users.filter(u=>u.role==='student');
+  return`<div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:11px">
+      <input style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--font);font-size:13px;outline:none;background:var(--gray)" placeholder="🔍 खोजें..." oninput="stuSearch(this.value)" id="stuSrch"/>
+      <button onclick="addStuPrompt()" style="padding:8px 13px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--g),var(--s));color:#fff;font-size:13px;font-weight:700;cursor:pointer">+ Add</button>
+    </div>
+    ${stus.length?`<div class="tw"><table id="stuTbl">
+      <tr><th>#</th><th>नाम</th><th>Class</th><th>ID</th><th>Action</th></tr>
+      ${stus.map((s,i)=>`<tr>
+        <td style="color:var(--muted)">${i+1}</td>
+        <td><b>${esc(s.name)}</b><br><span style="font-size:10.5px;color:var(--muted)">${esc(s.uname)}</span></td>
+        <td><span class="tag tag-b">${esc(s.class||'—')}</span></td>
+        <td style="font-size:11.5px;font-weight:600;color:var(--s)">${esc(s.enrolled||'—')}</td>
+        <td><button onclick="rmStu(${s.id})" style="background:var(--red2);color:var(--red);border:none;padding:3px 9px;border-radius:7px;font-size:11px;cursor:pointer">Remove</button></td>
+      </tr>`).join('')}
+    </table></div>`:'<div class="empty"><div class="ei">👨‍🎓</div><p>कोई student नहीं<br>+ Add से जोड़ें</p></div>'}
+  </div>`;
+}
+
+function addStuPrompt(){
+  const n=prompt('Student नाम:');if(!n)return;
+  const c=prompt('Class:');if(!c)return;
+  const u=prompt('Username:');if(!u)return;
+  const p=prompt('Password:');if(!p)return;
+  if(db.users.find(x=>x.uname===u)){toast('❌ Username लिया हुआ है');return;}
+  db.users.push({id:Date.now(),role:'student',uname:u,pass:p,name:n,class:c,enrolled:'CP'+String(Date.now()).slice(-4),stats:{q:0,t:0,best:0}});
+  db.stats.totalStudents=db.users.filter(x=>x.role==='student').length;
+  saveDB();dPage('students',null);toast('✅ Student add हो गया!');
+}
+
+function rmStu(id){
+  if(!confirm('Student remove करें?'))return;
+  db.users=db.users.filter(u=>u.id!==id);
+  db.stats.totalStudents=db.users.filter(u=>u.role==='student').length;
+  saveDB();dPage('students',null);toast('🗑️ Student remove हो गया');
+}
+
+function stuSearch(q){
+  document.querySelectorAll('#stuTbl tr:not(:first-child)').forEach(r=>{
+    r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';
+  });
+}
+
+function rTeachers(){
+  const teas=db.users.filter(u=>u.role==='teacher');
+  return`<div class="card">
+    <div class="card-t">👩‍🏫 Teachers (${teas.length})</div>
+    ${teas.map(t=>`
+      <div style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)">
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--b),var(--b2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff">${t.name.charAt(0)}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">${esc(t.name)}</div><div style="font-size:10.5px;color:var(--muted)">${esc(t.uname)} • ${esc(t.subject||'All Subjects')}</div></div>
+        <span class="pill pill-g">Active</span>
+      </div>`).join('')}
+    <button onclick="addTeaPrompt()" style="width:100%;padding:10px;border-radius:24px;border:none;background:linear-gradient(135deg,var(--b),var(--b2));color:#fff;font-family:var(--font);font-size:13.5px;font-weight:700;cursor:pointer;margin-top:11px">+ Teacher Add करें</button>
+  </div>`;
+}
+
+function addTeaPrompt(){
+  const n=prompt('Teacher नाम:');if(!n)return;
+  const sub=prompt('Subject:');if(!sub)return;
+  const u=prompt('Username:');if(!u)return;
+  const p=prompt('Password:');if(!p)return;
+  if(db.users.find(x=>x.uname===u)){toast('❌ Username लिया हुआ है');return;}
+  db.users.push({id:Date.now(),role:'teacher',uname:u,pass:p,name:n,subject:sub});
+  saveDB();dPage('teachers',null);toast('✅ Teacher add हो गया!');
+}
+
+function rMCQBank(){
+  return`<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+      <div class="card-t" style="margin-bottom:0">📝 MCQ Bank (${db.mcqs.length})</div>
+      <button onclick="addMCQPrompt()" style="padding:7px 13px;border-radius:20px;border:none;background:linear-gradient(135deg,var(--g),var(--s));color:#fff;font-size:12.5px;font-weight:700;cursor:pointer">+ Add MCQ</button>
+    </div>
+    ${db.mcqs.length?db.mcqs.slice().reverse().map(m=>`
+      <div style="background:var(--gray);border-radius:9px;padding:10px;margin-bottom:7px;border-left:3px solid var(--g2)">
+        <div style="font-size:13px;font-weight:600;margin-bottom:3px">${esc(m.q)}</div>
+        <div style="font-size:11px;color:var(--muted)">A) ${esc(m.a)} | B) ${esc(m.b)}</div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px;align-items:center">
+          <div><span class="tag tag-b">${esc(m.subject)}</span> <span class="tag tag-g">Ans: ${m.ans}</span></div>
+          <button onclick="delMCQ(${m.id})" style="background:var(--red2);color:var(--red);border:none;padding:3px 9px;border-radius:7px;font-size:11px;cursor:pointer">🗑️</button>
+        </div>
+      </div>`).join(''):'<div class="empty"><div class="ei">📝</div><p>कोई MCQ नहीं<br>+ Add MCQ से जोड़ें</p></div>'}
+  </div>`;
+}
+
+function addMCQPrompt(){
+  const subj=prompt('Subject:');if(!subj)return;
+  const q=prompt('Question:');if(!q)return;
+  const a=prompt('Option A:');if(!a)return;
+  const b=prompt('Option B:');if(!b)return;
+  const c=prompt('Option C (optional, Enter skip):');
+  const d=prompt('Option D (optional, Enter skip):');
+  const ans=(prompt('सही उत्तर A/B/C/D:')||'A').toUpperCase().charAt(0);
+  const exp=prompt('Explanation (optional, Enter skip):')||'';
+  db.mcqs.push({id:Date.now(),subject:subj,q,a,b,c:c||'',d:d||'',ans,exp});
+  saveDB();updateTSubjDD();dPage('mcqbank',null);toast('✅ MCQ add हो गया!');
+}
+
+function delMCQ(id){
+  if(!confirm('MCQ delete करें?'))return;
+  db.mcqs=db.mcqs.filter(m=>m.id!==id);
+  saveDB();dPage('mcqbank',null);toast('🗑️ MCQ delete हो गया');
+}
+
+function rNotesLib(){
+  return`<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+      <div class="card-t" style="margin-bottom:0">📖 Notes Library (${db.notes.length})</div>
+      <button onclick="addNotePrompt()" style="padding:7px 13px;border-radius:20px;border:none;background:linear-gradient(135deg,var(--gold),#F57F17);color:#fff;font-size:12.5px;font-weight:700;cursor:pointer">+ Add Note</button>
+    </div>
+    ${db.notes.length?db.notes.map(n=>`
+      <div style="background:var(--gold2);border-radius:9px;padding:10px;margin-bottom:7px;border-left:3px solid var(--gold)">
+        <div style="font-size:13px;font-weight:700">${esc(n.title)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${esc(n.subject)} • ${esc(n.teacher||'Director')}</div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px;align-items:flex-start">
+          <span style="font-size:11.5px;color:var(--text)">${esc((n.body||'').substring(0,60))}...</span>
+          <button onclick="delNote(${n.id})" style="background:var(--red2);color:var(--red);border:none;padding:3px 9px;border-radius:7px;font-size:11px;cursor:pointer;flex-shrink:0;margin-left:7px">🗑️</button>
+        </div>
+      </div>`).join(''):'<div class="empty"><div class="ei">📖</div><p>कोई note नहीं</p></div>'}
+  </div>`;
+}
+
+function addNotePrompt(){
+  const subj=prompt('Subject:');if(!subj)return;
+  const title=prompt('Title:');if(!title)return;
+  const body=prompt('Note Content:');if(!body)return;
+  db.notes.push({id:Date.now(),subject:subj,title,body,date:nd(),teacher:CU.name});
+  saveDB();dPage('noteslib',null);toast('✅ Note add हो गया!');
+}
+
+function delNote(id){
+  if(!confirm('Note delete करें?'))return;
+  db.notes=db.notes.filter(n=>n.id!==id);
+  saveDB();dPage('noteslib',null);toast('🗑️ Note delete हो गया');
+}
+
+function rBroadcast(){
+  return`
+  <div class="bc-box">
+    <h3>📢 सभी Students को Message भेजें</h3>
+    <textarea class="bc-ta" id="bcmsg" placeholder="Message लिखें..."></textarea>
+    <button class="bc-send" onclick="sendBC()">📤 Send करें</button>
+  </div>
+  <div class="card"><div class="card-t">📋 Sent Messages</div>
+    ${db.broadcasts.length?db.broadcasts.slice().reverse().slice(0,10).map(b=>`
+      <div style="padding:9px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:13px">${esc(b.msg)}</div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:2px">${b.time} • ${esc(b.sender)}</div>
+      </div>`).join(''):'<div class="empty"><div class="ei">📢</div><p>कोई broadcast नहीं</p></div>'}
+  </div>`;
+}
+
+function sendBC(){
+  const msg=(document.getElementById('bcmsg')||{}).value||'';
+  if(!msg.trim()){toast('⚠️ Message खाली है');return;}
+  const e={id:Date.now(),msg:msg.trim(),sender:CU.name,time:nt()+' '+nd()};
+  db.broadcasts.push(e);saveDB();
+  localStorage.setItem('cpai_bc',JSON.stringify(e));
+  toast('✅ Broadcast sent!');dPage('broadcast',null);
+}
+
+function rDirLB(){
+  const lb=[...db.leaderboard].sort((a,b)=>b.pct-a.pct);
+  const seen={};const uniq=lb.filter(e=>{if(!seen[e.name]){seen[e.name]=true;return true;}return false;});
+  const icons=['🥇','🥈','🥉'];const rc=['g1','g2','g3'];
+  return`<div class="card">
+    <div class="card-t">🏆 All-Time Leaderboard</div>
+    ${uniq.length?uniq.map((e,i)=>`
+      <div class="lbrow ${rc[i]||''}">
+        <div class="lbrk">${i<3?icons[i]:'#'+(i+1)}</div>
+        <div class="lbav" style="background:${e.color||'#FF6B00'}">${e.name.charAt(0)}</div>
+        <div style="flex:1"><div class="lbnm">${esc(e.name)}</div><div style="font-size:10.5px;color:var(--muted)">${esc(e.class)} • ${esc(e.subject)}</div></div>
+        <div class="lbsc">${e.pct}%</div>
+      </div>`).join(''):'<div class="empty"><div class="ei">🏆</div><p>अभी कोई score नहीं</p></div>'}
+  </div>`;
+}
+
+function rSettings(){
+  const c=db.coaching;
+  const fbUrl = localStorage.getItem('cpai_fburl')||'';
+  return`
+  <div class="card">
+    <div class="card-t">🏫 Coaching Details</div>
+    <label style="font-size:11.5px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Coaching Name</label>
+    <input class="if" id="cname" value="${esc(c.name)}"/>
+    <label style="font-size:11.5px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">City</label>
+    <input class="if" id="ccity" value="${esc(c.city)}"/>
+    <button class="abtn bg" onclick="saveSet()">💾 Save Settings</button>
+  </div>
+
+  <div class="card" style="border:1.5px solid rgba(21,101,192,.3)">
+    <div class="card-t" style="color:var(--b)">🔥 Firebase Sync — सभी Devices पर Data</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:9px;line-height:1.7">
+      Firebase से connect करने पर सभी mobile/browser पर data दिखेगा।<br>
+      <b style="color:var(--b)">firebase.google.com</b> → Realtime Database → URL copy करें
+    </p>
+    <input class="if" id="fburl" value="${esc(fbUrl)}" placeholder="https://xxxxx-default-rtdb.firebaseio.com"/>
+    <div style="display:flex;gap:7px">
+      <button class="abtn bb" style="flex:1" onclick="saveFBUrl()">💾 URL Save करें</button>
+      <button class="abtn bg" style="flex:1" onclick="syncToFirebase()">☁️ Firebase पर Upload</button>
+    </div>
+    <div id="fbStatus" style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center"></div>
+    <button class="abtn" style="background:linear-gradient(135deg,#FF6B00,#E84393);margin-top:7px" onclick="loadFromFirebase()">📥 Firebase से Download</button>
+  </div>
+
+  <div class="card">
+    <div class="card-t">🔐 Change Password</div>
+    <input class="if" type="password" id="npwd" placeholder="New Password"/>
+    <button class="abtn bb" onclick="chgPwd()">🔐 Update</button>
+  </div>
+
+  <div class="card" style="border:1.5px solid rgba(27,122,62,.2)">
+    <div class="card-t" style="color:var(--g)">📤 Data Export / Import</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Data को copy करके दूसरे device पर paste करें:</p>
+    <button class="abtn bg" style="margin-bottom:7px" onclick="showExportText()">📋 Data Copy करें</button>
+    <div id="exportBox" style="display:none;margin-bottom:10px">
+      <textarea id="exportTA" style="width:100%;height:100px;font-size:10px;border:1.5px solid var(--border);border-radius:9px;padding:8px;resize:none;background:var(--gray)" readonly></textarea>
+      <button onclick="copyExport()" class="abtn bg" style="margin-top:5px">📋 Copy करें</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:6px">Copy किया हुआ JSON यहाँ paste करें:</p>
+    <textarea id="importTA" style="width:100%;height:80px;font-size:11px;border:1.5px solid var(--border);border-radius:9px;padding:8px;resize:none;background:var(--gray);outline:none;" placeholder='Paste JSON data here...'></textarea>
+    <button onclick="importFromText()" class="abtn bg" style="margin-top:5px">📥 Import करें</button>
+  </div>
+
+  <div class="card" style="border:1.5px solid rgba(198,40,40,.2)">
+    <div class="card-t" style="color:var(--red)">⚠️ Danger Zone</div>
+    <button class="abtn bred" onclick="resetAll()">🗑️ सारा Data Reset करें</button>
+  </div>`;
+}
+
+/* ═══ FIREBASE SYNC ═══ */
+function saveFBUrl(){
+  const url = (document.getElementById('fburl')||{}).value?.trim();
+  if(!url){ toast('⚠️ URL खाली है'); return; }
+  localStorage.setItem('cpai_fburl', url);
+  toast('✅ Firebase URL save हो गई!');
+}
+
+function getFBUrl(){
+  return (localStorage.getItem('cpai_fburl')||'').replace(/\/+$/,'');
+}
+
+async function syncToFirebase(){
+  const url = getFBUrl();
+  if(!url){ toast('⚠️ पहले Firebase URL save करें'); return; }
+  const st = document.getElementById('fbStatus');
+  if(st) st.textContent = '⏳ Upload हो रहा है...';
+  try{
+    const res = await fetch(url+'/pathshala.json', {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(db)
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    if(st) st.textContent = '✅ Firebase पर upload हो गया!';
+    toast('✅ सारा Data Firebase पर save हो गया!');
+  } catch(e){
+    console.error('Firebase sync error:',e);
+    if(st) st.textContent = '❌ Error: '+e.message;
+    toast('❌ Firebase error — URL check करें');
+  }
+}
+
+async function loadFromFirebase(){
+  const url = getFBUrl();
+  if(!url){ toast('⚠️ पहले Firebase URL save करें'); return; }
+  const st = document.getElementById('fbStatus');
+  if(st) st.textContent = '⏳ Download हो रहा है...';
+  try{
+    const res = await fetch(url+'/pathshala.json');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    if(!data || !data.users){ toast('❌ Firebase पर data नहीं मिला'); return; }
+    if(!confirm('Firebase से data load करने पर local data replace होगा। Continue?')) return;
+    db.users       = data.users       || db.users;
+    db.mcqs        = data.mcqs        || [];
+    db.notes       = data.notes       || [];
+    db.leaderboard = data.leaderboard || [];
+    db.activityLog = data.activityLog || [];
+    db.broadcasts  = data.broadcasts  || [];
+    db.coaching    = data.coaching    || db.coaching;
+    db.stats       = data.stats       || db.stats;
+    saveDB();
+    if(st) st.textContent = '✅ Data load हो गया!';
+    toast('✅ Firebase से data load हो गया!');
+    dPage('dash', document.querySelector('#sDir .ni'));
+  } catch(e){
+    console.error('Firebase load error:',e);
+    if(st) st.textContent = '❌ Error: '+e.message;
+    toast('❌ Firebase load error — URL check करें');
+  }
+}
+
+/* Auto-sync to Firebase on every saveDB */
+const _fbSaveDB = function(){
+  try{ localStorage.setItem(SK, JSON.stringify(db)); } catch(e){}
+  const fbUrl = getFBUrl();
+  if(fbUrl){
+    fetch(fbUrl+'/pathshala.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(db)
+    }).catch(()=>{});
+  }
+};
+// Override saveDB
+window.saveDB = _fbSaveDB;
+
+function saveSet(){
+  db.coaching.name=document.getElementById('cname').value;
+  db.coaching.city=document.getElementById('ccity').value;
+  saveDB();toast('✅ Settings saved!');
+}
+function chgPwd(){
+  const p=document.getElementById('npwd').value;if(!p)return;
+  const u=db.users.find(x=>x.id===CU.id);if(u)u.pass=p;
+  saveDB();toast('✅ Password updated!');
+}
+function exportAll(){
+  const json = JSON.stringify(db, null, 2);
+  try {
+    // Method 1: data URI (works on most mobile browsers)
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
+    const a = document.createElement('a');
+    a.href = dataUri;
+    a.download = 'pathshala_backup.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast('✅ Export हो रहा है...');
+  } catch(e) {
+    // Method 2: show text to copy
+    showExportText();
+  }
+}
+
+function showExportText(){
+  const box = document.getElementById('exportBox');
+  const ta  = document.getElementById('exportTA');
+  if (!box || !ta) return;
+  ta.value = JSON.stringify(db, null, 2);
+  box.style.display = 'block';
+  ta.select();
+  toast('📋 Text select करके copy करें');
+}
+
+function copyExport(){
+  const ta = document.getElementById('exportTA');
+  if (!ta) return;
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+  try {
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      toast('✅ Data copy हो गया! Notes app में paste करें।');
+    }).catch(()=>{
+      document.execCommand('copy');
+      toast('✅ Copied!');
+    });
+  } catch(e) {
+    document.execCommand('copy');
+    toast('✅ Copied!');
+  }
+}
+function importFromText(){
+  const ta = document.getElementById('importTA');
+  if (!ta || !ta.value.trim()) { toast('⚠️ पहले JSON paste करें'); return; }
+  try {
+    const imp = JSON.parse(ta.value.trim());
+    if (!imp.users) { toast('❌ Invalid data format'); return; }
+    if (!confirm('Import करने से मौजूदा data replace होगा। Continue?')) return;
+    if (imp.users)       db.users       = imp.users;
+    if (imp.mcqs)        db.mcqs        = imp.mcqs;
+    if (imp.notes)       db.notes       = imp.notes;
+    if (imp.leaderboard) db.leaderboard = imp.leaderboard;
+    if (imp.activityLog) db.activityLog = imp.activityLog;
+    if (imp.broadcasts)  db.broadcasts  = imp.broadcasts;
+    if (imp.coaching)    db.coaching    = imp.coaching;
+    if (imp.stats)       db.stats       = imp.stats;
+    saveDB();
+    ta.value = '';
+    toast('✅ Data import हो गया! Page refresh होगा...');
+    setTimeout(() => location.reload(), 1500);
+  } catch(e) {
+    toast('❌ Invalid JSON — सही data paste करें');
+  }
+}
+function resetAll(){
+  if(!confirm('सारा MCQ, Notes, Students, Activity delete होगा?'))return;
+  db.mcqs=[];db.notes=[];db.leaderboard=[];db.activityLog=[];db.broadcasts=[];
+  db.stats={totalStudents:0,onlineNow:0,todayQ:0,testsToday:0};
+  db.users=db.users.filter(u=>u.role!=='student');
+  saveDB();dPage('dash',document.querySelector('#sDir .ni'));toast('✅ Reset हो गया!');
+}
+
+/* ═══════════════ TEACHER ═══════════════ */
+function launchTea(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sTea').classList.add('on');
+  document.getElementById('tav').textContent=CU.name.charAt(0);
+  document.getElementById('tname').textContent=CU.name;
+  tPage('tdash',document.querySelector('#sTea .ni'));
+}
+
+function tPage(pg,el){
+  document.querySelectorAll('#sTea .ni').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const titles={tdash:'Dashboard',addmcq:'MCQ बनाएं',addnote:'Notes Upload',tannounce:'Announcement',tstudents:'Students'};
+  document.getElementById('tpTitle').textContent=titles[pg]||pg;
+  const fns={tdash:rTeaDash,addmcq:rAddMCQ,addnote:rAddNote,tannounce:rTeaAnnounce,tstudents:rTeaStudents};
+  if(fns[pg])document.getElementById('tcontent').innerHTML=fns[pg]();
+}
+
+function rTeaDash(){
+  return`
+  <div class="stat-grid">
+    <div class="scard gc"><div class="si">📝</div><div class="sn" style="color:var(--g)">${db.mcqs.length}</div><div class="sl">Total MCQs</div></div>
+    <div class="scard oc"><div class="si">📖</div><div class="sn" style="color:var(--s)">${db.notes.filter(n=>n.teacher===CU.name).length}</div><div class="sl">My Notes</div></div>
+    <div class="scard bc"><div class="si">👨‍🎓</div><div class="sn" style="color:var(--b)">${db.users.filter(u=>u.role==='student').length}</div><div class="sl">Students</div></div>
+    <div class="scard pc"><div class="si">🏆</div><div class="sn" style="color:var(--p)">${db.leaderboard.length}</div><div class="sl">Test Results</div></div>
+  </div>
+  <div class="card">
+    <div class="card-t">📢 Quick Broadcast</div>
+    <textarea class="if" id="tbcmsg" placeholder="Students को message..." style="min-height:70px"></textarea>
+    <button class="abtn bg" onclick="teaBC()">📤 Send to All Students</button>
+  </div>`;
+}
+
+function teaBC(){
+  const msg=(document.getElementById('tbcmsg')||{}).value||'';
+  if(!msg.trim())return;
+  const e={id:Date.now(),msg:msg.trim(),sender:CU.name,time:nt()};
+  db.broadcasts.push(e);saveDB();
+  localStorage.setItem('cpai_bc',JSON.stringify(e));
+  toast('✅ Broadcast sent!');
+  document.getElementById('tbcmsg').value='';
+}
+
+function rAddMCQ(){
+  return`<div class="card">
+    <div class="card-t">📝 New MCQ Add करें</div>
+    <input class="if" id="tmqs" placeholder="Subject"/>
+    <textarea class="if" id="tmqq" placeholder="Question..." style="min-height:65px"></textarea>
+    <input class="if" id="tmqa" placeholder="A) Option 1"/>
+    <input class="if" id="tmqb" placeholder="B) Option 2"/>
+    <input class="if" id="tmqc" placeholder="C) Option 3 (optional)"/>
+    <input class="if" id="tmqd" placeholder="D) Option 4 (optional)"/>
+    <select class="if" id="tmqans"><option value="A">A सही है</option><option value="B">B सही है</option><option value="C">C सही है</option><option value="D">D सही है</option></select>
+    <textarea class="if" id="tmqe" placeholder="Explanation (optional)..." style="min-height:55px"></textarea>
+    <button class="abtn bg" onclick="teaAddMCQ()">✅ MCQ Save करें</button>
+  </div>`;
+}
+
+function teaAddMCQ(){
+  const subj=(document.getElementById('tmqs')||{}).value||'';
+  const q=(document.getElementById('tmqq')||{}).value||'';
+  const a=(document.getElementById('tmqa')||{}).value||'';
+  const b=(document.getElementById('tmqb')||{}).value||'';
+  if(!subj.trim()||!q.trim()||!a.trim()||!b.trim()){toast('⚠️ Subject, Question, A, B ज़रूरी हैं');return;}
+  db.mcqs.push({
+    id:Date.now(),subject:subj.trim(),q:q.trim(),
+    a:a.trim(),b:b.trim(),
+    c:(document.getElementById('tmqc')||{}).value||'',
+    d:(document.getElementById('tmqd')||{}).value||'',
+    ans:(document.getElementById('tmqans')||{}).value||'A',
+    exp:(document.getElementById('tmqe')||{}).value||'',
+    addedBy:CU.name
+  });
+  saveDB();updateTSubjDD();tPage('addmcq',null);toast('✅ MCQ save हो गया!');
+}
+
+function rAddNote(){
+  return`<div class="card">
+    <div class="card-t">📖 Note Upload करें</div>
+    <input class="if" id="tns" placeholder="Subject"/>
+    <input class="if" id="tnt" placeholder="Title"/>
+    <textarea class="if" id="tnb" placeholder="Note Content..." style="min-height:110px"></textarea>
+    <button class="abtn bgold" onclick="teaAddNote()">📤 Students को Distribute करें</button>
+  </div>
+  <div class="card">
+    <div class="card-t">📋 My Notes (${db.notes.filter(n=>n.teacher===CU.name).length})</div>
+    ${db.notes.filter(n=>n.teacher===CU.name).slice().reverse().slice(0,5).map(n=>`
+      <div style="background:var(--gold2);border-radius:9px;padding:9px;margin-bottom:7px">
+        <div style="font-size:13px;font-weight:700">${esc(n.title)}</div>
+        <div style="font-size:10.5px;color:var(--muted)">${esc(n.subject)} • ${n.date}</div>
+      </div>`).join('')||'<div class="empty"><div class="ei">📖</div><p>कोई note नहीं</p></div>'}
+  </div>`;
+}
+
+function teaAddNote(){
+  const s=(document.getElementById('tns')||{}).value||'';
+  const t=(document.getElementById('tnt')||{}).value||'';
+  const b=(document.getElementById('tnb')||{}).value||'';
+  if(!s.trim()||!t.trim()||!b.trim()){toast('⚠️ सब fields भरें');return;}
+  db.notes.push({id:Date.now(),subject:s.trim(),title:t.trim(),body:b.trim(),date:nd(),teacher:CU.name});
+  saveDB();tPage('addnote',null);toast('✅ Note distribute हो गया!');
+}
+
+function rTeaAnnounce(){
+  return`<div class="card">
+    <div class="card-t">📢 Announcement</div>
+    <input class="if" id="aTitle" placeholder="Title"/>
+    <textarea class="if" id="aBody" placeholder="Message..." style="min-height:90px"></textarea>
+    <button class="abtn bb" onclick="teaAnnounce()">📤 Send</button>
+  </div>
+  <div class="card"><div class="card-t">📋 Sent</div>
+    ${db.broadcasts.slice().reverse().slice(0,5).map(b=>`
+      <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:12.5px">${esc(b.msg)}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${b.time} • ${esc(b.sender)}</div>
+      </div>`).join('')||'<div class="empty"><p>कोई announcement नहीं</p></div>'}
+  </div>`;
+}
+
+function teaAnnounce(){
+  const ti=(document.getElementById('aTitle')||{}).value||'';
+  const bo=(document.getElementById('aBody')||{}).value||'';
+  if(!bo.trim())return;
+  const msg=(ti.trim()?ti.trim()+': ':'')+bo.trim();
+  const e={id:Date.now(),msg,sender:CU.name,time:nt()+' '+nd()};
+  db.broadcasts.push(e);saveDB();
+  localStorage.setItem('cpai_bc',JSON.stringify(e));
+  toast('✅ Announcement sent!');tPage('tannounce',null);
+}
+
+function rTeaStudents(){
+  const stus=db.users.filter(u=>u.role==='student');
+  return`<div class="card">
+    <div class="card-t">👨‍🎓 Students (${stus.length})</div>
+    ${stus.length?stus.map(s=>`
+      <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--s));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff">${s.name.charAt(0)}</div>
+        <div><div style="font-size:13px;font-weight:600">${esc(s.name)}</div><div style="font-size:10.5px;color:var(--muted)">${esc(s.class||'—')} • ${esc(s.enrolled||'—')}</div></div>
+      </div>`).join(''):'<div class="empty"><div class="ei">👨‍🎓</div><p>कोई student नहीं</p></div>'}
+  </div>`;
+}
+
+/* ═══════════════ STUDENT ═══════════════ */
+/* ═══════════════════════════════
+   TTS — ROBUST MULTI-METHOD
+   Works on hosted HTTPS websites
+═══════════════════════════════ */
+let ttsOn     = false;
+let ttsVoice  = null;
+let ttsMethod = 'browser'; // 'browser' | 'pollinations'
+let ttsAudio  = null;      // for Pollinations audio
+let ttsReady  = false;     // user gesture happened
+
+/* ── Voice loader (runs after user interaction) ── */
+function initTTS() {
+  if (!window.speechSynthesis) { ttsMethod = 'pollinations'; return; }
+  // Force voices load — some browsers need this after user gesture
+  const vs = speechSynthesis.getVoices();
+  if (vs.length) {
+    selectVoice(vs);
+  } else {
+    speechSynthesis.onvoiceschanged = () => selectVoice(speechSynthesis.getVoices());
+    // Trigger voices load with silent utterance
+    const silent = new SpeechSynthesisUtterance('');
+    silent.volume = 0;
+    speechSynthesis.speak(silent);
+    speechSynthesis.cancel();
+  }
+  ttsReady = true;
+}
+
+function selectVoice(vs) {
+  if (!vs || !vs.length) return;
+  ttsVoice = (appLang === 'hi')
+    ? (vs.find(v => v.lang === 'hi-IN') || vs.find(v => v.lang.startsWith('hi')) || vs.find(v => v.default) || vs[0])
+    : (vs.find(v => v.lang === 'en-IN') || vs.find(v => v.lang.startsWith('en')) || vs.find(v => v.default) || vs[0]);
+}
+
+/* ── Main speakText ── */
+function speakText(rawText) {
+  if (!ttsOn) return;
+  // Clean HTML & markdown
+  const clean = rawText
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[*_`#\[\]>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, 400); // limit length
+  if (!clean) return;
+
+  stopSpeak();
+
+  // Try browser TTS first
+  if (window.speechSynthesis && ttsReady) {
+    try {
+      const u = new SpeechSynthesisUtterance(clean);
+      u.lang   = appLang === 'hi' ? 'hi-IN' : 'en-US';
+      u.rate   = 0.88;
+      u.pitch  = 1.05;
+      u.volume = 1;
+      // Re-select voice (language may have changed)
+      const vs = speechSynthesis.getVoices();
+      if (vs.length) selectVoice(vs);
+      if (ttsVoice) u.voice = ttsVoice;
+      u.onerror = (e) => {
+        console.warn('Browser TTS error, switching to Pollinations:', e.error);
+        pollinationsTTS(clean);
+      };
+      speechSynthesis.speak(u);
+      // Chrome bug fix: speechSynthesis freezes after ~15 sec
+      const resumeTimer = setInterval(() => {
+        if (!speechSynthesis.speaking) { clearInterval(resumeTimer); return; }
+        speechSynthesis.pause();
+        speechSynthesis.resume();
+      }, 5000);
+      return;
+    } catch(e) {
+      console.warn('Browser TTS failed:', e);
+    }
+  }
+
+  // Fallback: Pollinations TTS (works on all HTTPS sites)
+  pollinationsTTS(clean);
+}
+
+/* ── Pollinations TTS fallback ── */
+function pollinationsTTS(text) {
+  try {
+    const lang = appLang === 'hi' ? 'hi' : 'en';
+    // Use Pollinations audio endpoint
+    const url = 'https://text.pollinations.ai/' + encodeURIComponent(text)
+      + '?model=openai-audio&voice=' + (appLang === 'hi' ? 'nova' : 'alloy')
+      + '&private=true';
+    // Try as audio
+    if (ttsAudio) { ttsAudio.pause(); ttsAudio = null; }
+    ttsAudio = new Audio();
+    ttsAudio.src = url;
+    ttsAudio.play().catch(e => {
+      console.warn('Audio play failed:', e);
+      // Last resort: ResponsiveVoice-style fallback with speech API
+      browserTTSFallback(text);
+    });
+  } catch(e) {
+    console.warn('Pollinations TTS error:', e);
+    browserTTSFallback(text);
+  }
+}
+
+/* ── Final fallback ── */
+function browserTTSFallback(text) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang   = appLang === 'hi' ? 'hi-IN' : 'en-US';
+  u.rate   = 0.85;
+  u.volume = 1;
+  speechSynthesis.speak(u);
+}
+
+function stopSpeak() {
+  if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+  if (ttsAudio) { try { ttsAudio.pause(); ttsAudio.currentTime = 0; } catch(e){} }
+}
+
+function toggleTTS() {
+  // First call initializes TTS (needs user gesture)
+  if (!ttsReady) initTTS();
+
+  ttsOn = !ttsOn;
+
+  // Update ALL TTS buttons
+  document.querySelectorAll('.tts-btn, #stuTtsBtn').forEach(b => {
+    b.innerHTML = ttsOn ? '🔊' : '🔇';
+    b.style.background = ttsOn ? 'rgba(27,122,62,0.15)' : '';
+    b.style.borderColor = ttsOn ? 'var(--g)' : '';
+    b.title = ttsOn ? 'Voice ON — tap to mute' : 'Voice OFF — tap to enable';
+  });
+
+  if (ttsOn) {
+    const msg = appLang === 'hi' ? 'आवाज़ चालू हो गई' : 'Voice is now enabled';
+    toast(msg);
+    setTimeout(() => speakText(msg), 300);
+  } else {
+    stopSpeak();
+    toast(appLang === 'hi' ? 'आवाज़ बंद' : 'Voice off');
+  }
+}
+
+/* Auto-init on first user interaction with page */
+['click','touchstart','keydown'].forEach(ev => {
+  document.addEventListener(ev, function initOnGesture() {
+    if (!ttsReady) initTTS();
+    document.removeEventListener(ev, initOnGesture);
+  }, { once: true });
+});
+
+/* ═══════════════════════════════
+   LANGUAGE SYSTEM (EN / HI)
+═══════════════════════════════ */
+let appLang = 'hi'; // default Hindi
+
+const LANG = {
+  hi: {
+    appName:      'चौधरी पाठशाला AI',
+    tagline:      '24×7 AI शिक्षक • मुफ़्त',
+    chatPlaceholder: 'कोई भी सवाल पूछें...',
+    greeting:     (name) => `नमस्ते ${name}! \n\n मैं **चौधरी पाठशाला A I** हूँ — आपका 24×7 शिक्षक!\n\nकोई भी सवाल पूछें। 😊`,
+    tabChat:  'Chat',  tabTest: 'Test',
+    tabNotes: 'Notes', tabRank: 'Rank', tabProf: 'Profile',
+    sendPlaceholder: 'कोई भी सवाल पूछें...',
+    aiSystem: `तुम "चौधरी पाठशाला AI" हो — expert Hindi teacher।
+सरल हिंदी में step-by-step समझाओ। उदाहरण दो। जवाब 5-8 lines में रखो।`,
+    noAnswer: 'माफ़ करें, जवाब नहीं मिला।',
+    netError: 'माफ़ करें, नेटवर्क या AI server error। 🙏\nथोड़ी देर बाद दोबारा try करें।',
+    langBtnLabel: '🌐 EN',
+  },
+  en: {
+    appName:      'Chaudhary Pathshala AI',
+    tagline:      '24×7 AI Teacher • Free',
+    chatPlaceholder: 'Ask any question...',
+    greeting:     (name) => `Hello ${name}! 👋\n\nI am **Chaudhary Pathshala AI** — your 24×7 digital teacher!\n\nAsk me anything. 😊`,
+    tabChat:  'Chat',  tabTest: 'Test',
+    tabNotes: 'Notes', tabRank: 'Rank', tabProf: 'Profile',
+    sendPlaceholder: 'Ask any question...',
+    aiSystem: `You are "Chaudhary Pathshala AI" — an expert teacher.
+Answer clearly in English with step-by-step explanations and examples. Keep answers 5-8 lines.`,
+    noAnswer: 'Sorry, no answer received.',
+    netError: 'Sorry, network or AI server error. Please try again.',
+    langBtnLabel: '🌐 HI',
+  }
+};
+
+function toggleLang() {
+  appLang = appLang === 'hi' ? 'en' : 'hi';
+  applyLang();
+  if (ttsOn) speakText(appLang === 'hi' ? 'भाषा हिंदी हो गई' : 'Language changed to English');
+}
+
+function applyLang() {
+  const L = LANG[appLang];
+  // Update all lang buttons
+  document.querySelectorAll('.lang-btn, #stuLangBtn').forEach(b => b.textContent = L.langBtnLabel);
+  // Student header
+  const h1 = document.querySelector('.shdr h1');
+  if (h1) h1.textContent = L.appName;
+  const hp = document.querySelector('.shdr p');
+  if (hp) hp.textContent = L.tagline;
+  // Chat placeholder
+  const mi = document.getElementById('mi');
+  if (mi) mi.placeholder = L.chatPlaceholder;
+  // Tabs
+  const tabs = document.querySelectorAll('.stab');
+  const tabKeys = ['tabChat','tabTest','tabNotes','tabRank','tabProf'];
+  const tabIcons = ['💬','📝','📖','🏆','👤'];
+  tabs.forEach((t, i) => {
+    if (tabKeys[i]) t.innerHTML = `<span>${tabIcons[i]}</span>${L[tabKeys[i]]}`;
+  });
+  // Update SYS prompt dynamically
+  window._currentSYS = L.aiSystem;
+}
+
+// Init
+window._currentSYS = LANG['hi'].aiSystem;
+
+let chatHist=[], busy=false, testSt={}, qAns=false;
+
+const SYS = `तुम "चौधरी पाठशाला AI" हो — expert Hindi teacher।
+सरल हिंदी में step-by-step समझाओ। उदाहरण दो। जवाब 5-8 lines में रखो।
+अगर image का ज़िक्र हो तो उसे समझकर जवाब दो।`;
+
+/* ═══ CHAT SYSTEM ═══ */
+
+function launchStu(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sStu').classList.add('on');
+  document.getElementById('snbadge').textContent=CU.name;
+  // Auto-sync from Firebase first
+  const fbUrl = getFBUrl();
+  if(fbUrl){
+    fetch(fbUrl+'/pathshala.json').then(r=>r.json()).then(data=>{
+      if(data&&data.mcqs){ db.mcqs=data.mcqs; db.notes=data.notes||[]; db.leaderboard=data.leaderboard||[]; saveDB(); updateTSubjDD(); renderNotes(); renderLB(); }
+    }).catch(()=>{});
+  }
+  loadSProf(); updateSStats(); updateTSubjDD(); renderLB(); renderNotes(); renderPastT();
+  db.stats.onlineNow=Math.max(0,db.stats.onlineNow)+1;saveDB();
+  // Check broadcast
+  const bc=localStorage.getItem('cpai_bc');
+  if(bc){try{const b=JSON.parse(bc);if(b.msg){document.getElementById('bcbt').textContent=b.msg;document.getElementById('bcb').classList.add('on');}}catch(e){}}
+  window.addEventListener('storage',e=>{
+    if(e.key==='cpai_bc'){try{const b=JSON.parse(e.newValue||'{}');if(b.msg){document.getElementById('bcbt').textContent=b.msg;document.getElementById('bcb').classList.add('on');}}catch(e2){}}
+  });
+  setTimeout(()=>{
+    addBot(LANG[appLang].greeting(CU.name));
+    applyLang();
+  },350);
+}
+
+function sTab(id,el){
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sp').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sp-'+id).classList.add('active');
+  if(id==='rank')renderLB();
+  if(id==='notes')renderNotes();
+}
+
+/* ═══ CHAT SYSTEM ═══ */
+
+/* --- addBot: AI message (left, grey) --- */
+function addBot(text) {
+  const a = document.getElementById('chatArea');
+  if (!a) return;
+  const d = document.createElement('div');
+  d.className = 'row bot';
+  const msgId = 'msg_' + Date.now();
+  d.innerHTML = `<div class="av">🏫</div>
+    <div style="max-width:85%">
+      <div class="bbl aiMsg" id="${msgId}">${fmt(text)}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:3px;">
+        <div class="ts">${nt()}</div>
+        <button onclick="speakText(document.getElementById('${msgId}').innerText)" 
+          style="background:none;border:none;cursor:pointer;font-size:13px;padding:0;opacity:0.6;" 
+          title="सुनें / Listen">🔊</button>
+        <button onclick="stopSpeak()" 
+          style="background:none;border:none;cursor:pointer;font-size:11px;padding:0;opacity:0.5;" 
+          title="रोकें / Stop">⏹</button>
+      </div>
+    </div>`;
+  a.appendChild(d);
+  a.scrollTop = a.scrollHeight;
+  // Auto-speak if TTS is ON
+  if (ttsOn) speakText(text);
+}
+
+/* --- addMe: User message (right, green) --- */
+function addMe(text) {
+  const a = document.getElementById('chatArea');
+  if (!a) return;
+  const d = document.createElement('div');
+  d.className = 'row me';
+  const ini = (CU && CU.name) ? CU.name.charAt(0).toUpperCase() : 'U';
+  d.innerHTML = `<div class="av">${ini}</div>
+    <div><div class="bbl userMsg">${esc(text)}</div>
+    <div class="ts">${nt()}</div></div>`;
+  a.appendChild(d);
+  a.scrollTop = a.scrollHeight;
+}
+
+/* --- typing indicator --- */
+function showTyp() {
+  const a = document.getElementById('chatArea');
+  if (!a) return;
+  const d = document.createElement('div');
+  d.className = 'typr'; d.id = 'typr';
+  d.innerHTML = `<div class="av" style="background:linear-gradient(135deg,var(--g),var(--g2))">🏫</div>
+    <div class="typb"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+  a.appendChild(d);
+  a.scrollTop = a.scrollHeight;
+}
+function hideTyp() { document.getElementById('typr')?.remove(); }
+
+/* --- busy state --- */
+function setBusy(v) {
+  busy = v;
+  const m = document.getElementById('mi');
+  const s = document.getElementById('sb2');
+  if (m) m.disabled = v;
+  if (s) s.disabled = v;
+}
+
+/* --- sendMsg: main send function --- */
+async function sendMsg() {
+  const el = document.getElementById('mi');
+  if (!el) return;
+  const text = el.value.trim();
+  if (!text || busy) return;
+  el.value = '';
+  el.style.height = 'auto';
+
+  addMe(text);
+  // Keep max 6 messages in history
+  chatHist.push({ role: 'user', text });
+  if (chatHist.length > 6) chatHist = chatHist.slice(-6);
+
+  setBusy(true);
+  showTyp();
+
+  // Activity log
+  const sub = gSub(text);
+  logAct('question', CU.name, CU.class || '', CU.name + ' ने question पूछा: "' + text.substring(0, 40) + (text.length > 40 ? '...' : '') + '"', '💬', '#E8F9EE');
+  if (sub && db.activityLog.length) db.activityLog[db.activityLog.length - 1].subject = sub;
+
+  try {
+    const reply = await fetchAI(text);
+    hideTyp();
+    chatHist.push({ role: 'bot', text: reply });
+    if (chatHist.length > 6) chatHist = chatHist.slice(-6);
+    addBot(reply);
+    // Update stats
+    const u = db.users.find(x => x.id === CU.id);
+    if (u) { if (!u.stats) u.stats = { q: 0, t: 0, best: 0 }; u.stats.q++; }
+    db.stats.todayQ++;
+    saveDB();
+    updateSStats();
+  } catch (e) {
+    hideTyp();
+    console.error('Chat error:', e);
+    addBot(LANG[appLang].netError);
+    chatHist.pop();
+  }
+  setBusy(false);
+}
+
+/* --- qa: quick ask from chips --- */
+function qa(t) {
+  const m = document.getElementById('mi');
+  if (m) { m.value = t; m.focus(); }
+  sendMsg();
+}
+
+/* --- onKey: Enter to send --- */
+function onKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMsg();
+  }
+}
+
+/* --- resizeInp --- */
+function resizeInp(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+/* --- sendImage: camera/photo doubt --- */
+function sendImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    // Show image in chat
+    const a = document.getElementById('chatArea');
+    if (!a) return;
+    const d = document.createElement('div');
+    d.className = 'row me';
+    const ini = CU.name.charAt(0).toUpperCase();
+    d.innerHTML = `<div class="av">${ini}</div>
+      <div><img src="${e.target.result}" style="max-width:180px;border-radius:12px;display:block;" alt="doubt image"/>
+      <div class="ts">${nt()}</div></div>`;
+    a.appendChild(d);
+    a.scrollTop = a.scrollHeight;
+    // Ask AI about image
+    const msg = 'मैंने एक question की photo भेजी है। इसे देखकर solve करो और step-by-step समझाओ।';
+    chatHist.push({ role: 'user', text: msg });
+    setBusy(true); showTyp();
+    fetchAI(msg).then(reply => {
+      hideTyp();
+      chatHist.push({ role: 'bot', text: reply });
+      addBot(reply);
+      setBusy(false);
+    }).catch(err => {
+      hideTyp(); console.error(err);
+      addBot('माफ़ करें, image process नहीं हो सकी। Text में question लिखें।');
+      setBusy(false);
+    });
+  };
+  reader.readAsDataURL(file);
+  input.value = ''; // reset input
+}
+
+/* --- gSub: guess subject --- */
+function gSub(t) {
+  const m = { physics: 'Physics', biology: 'Biology', chemistry: 'Chemistry', 'गणित': 'Mathematics', math: 'Mathematics', history: 'History', english: 'English', science: 'Science' };
+  for (const [k, v] of Object.entries(m)) if (t.toLowerCase().includes(k)) return v;
+  return '';
+}
+
+/* ═══ FETCH AI — Pollinations (stable) ═══ */
+async function fetchAI(userText) {
+  // Build context from last 6 messages
+  let prompt = '';
+  if (chatHist.length > 1) {
+    const ctx = chatHist.slice(-6)
+      .map(m => m.role === 'user' ? 'Student: ' + m.text : 'Teacher: ' + m.text)
+      .join('\n');
+    prompt = ctx + '\nTeacher:';
+  } else {
+    prompt = userText;
+  }
+
+  const seed = Math.floor(Math.random() * 99999);
+  const sys  = window._currentSYS || SYS;
+
+  const url = 'https://text.pollinations.ai/'
+    + encodeURIComponent(prompt)
+    + '?model=openai'
+    + '&system=' + encodeURIComponent(sys)
+    + '&seed=' + seed
+    + '&private=true';
+
+  const res = await fetch(url, { method: 'GET' });
+  if (!res.ok) throw new Error('Server error: HTTP ' + res.status);
+  const text = (await res.text()).trim();
+  return text || LANG[appLang].noAnswer;
+}
+
+/* Test */
+function updateTSubjDD(){
+  const s=document.getElementById('tSubj');if(!s)return;
+  const subjects=[...new Set(db.mcqs.map(m=>m.subject))];
+  s.innerHTML='<option value="all">🎯 सभी विषय</option>'+subjects.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+}
+
+function startTest(){
+  const subj=(document.getElementById('tSubj')||{}).value||'all';
+  const cnt=(document.getElementById('tCnt')||{}).value||'10';
+  let pool=subj==='all'?[...db.mcqs]:db.mcqs.filter(m=>m.subject===subj);
+  if(!pool.length){toast('⚠️ MCQ नहीं मिला — Admin से add कराएं');return;}
+  pool=shuf(pool);
+  const n=cnt==='all'?pool.length:Math.min(parseInt(cnt)||10,pool.length);
+  testSt={qs:pool.slice(0,n),cur:0,score:0,wrong:[],subj:subj==='all'?'Mixed':subj};
+  qAns=false;
+  document.getElementById('tSetup').style.display='none';
+  document.getElementById('tResult').style.display='none';
+  document.getElementById('tActive').style.display='block';
+  document.getElementById('tslbl').textContent=testSt.subj+' Test';
+  logAct('test',CU.name,CU.class||'',CU.name+' ने '+testSt.subj+' Test शुरू किया','📝','#E3F2FD');
+  if(db.activityLog[db.activityLog.length-1]) db.activityLog[db.activityLog.length-1].subject=testSt.subj;
+  renderQ();
+}
+
+function renderQ(){
+  const{qs,cur}=testSt;
+  const q=qs[cur];const total=qs.length;
+  const pct=((cur+1)/total*100).toFixed(0);
+  document.getElementById('tprog').textContent=`${cur+1}/${total}`;
+  document.getElementById('tpb').style.width=pct+'%';
+  document.getElementById('nxb').classList.remove('on');
+  const opts=[{k:'A',v:q.a},{k:'B',v:q.b},{k:'C',v:q.c},{k:'D',v:q.d}].filter(o=>o.v);
+  document.getElementById('tqarea').innerHTML=`
+    <div class="qn">Q.${cur+1} • ${esc(q.subject)}</div>
+    <div class="qt">${esc(q.q)}</div>
+    ${opts.map(o=>`<button class="to" onclick="ansQ('${o.k}',this)" data-k="${o.k}"><b>${o.k})</b> ${esc(o.v)}</button>`).join('')}
+    <div class="tex" id="qex">${q.exp?'💡 '+esc(q.exp):''}</div>`;
+}
+
+function ansQ(ch,btn){
+  if(qAns)return;qAns=true;
+  const q=testSt.qs[testSt.cur];
+  document.querySelectorAll('.to').forEach(b=>{b.disabled=true;if(b.dataset.k===q.ans)b.classList.add('right');else if(b===btn)b.classList.add('wrong');});
+  if(q.exp)document.getElementById('qex').classList.add('on');
+  if(ch===q.ans)testSt.score++;else testSt.wrong.push(q);
+  document.getElementById('nxb').classList.add('on');
+  document.getElementById('nxb').textContent=testSt.cur<testSt.qs.length-1?'अगला →':'📊 Result';
+}
+
+function nextQ(){
+  qAns=false;testSt.cur++;
+  if(testSt.cur>=testSt.qs.length)showResult();else renderQ();
+}
+
+function showResult(){
+  document.getElementById('tActive').style.display='none';
+  document.getElementById('tResult').style.display='block';
+  const{score,qs,wrong}=testSt;
+  const total=qs.length;const pct=Math.round(score/total*100);
+  document.getElementById('rtr').textContent=pct>=90?'🏆':pct>=70?'🥈':pct>=50?'🥉':'📚';
+  document.getElementById('rsc').textContent=`${score}/${total}`;
+  document.getElementById('rmsg').textContent=pct>=90?'शानदार! 🎉':pct>=70?'बहुत बढ़िया!':pct>=50?'अच्छा प्रयास!':'मेहनत करो! 💪';
+  document.getElementById('rco').textContent=score;
+  document.getElementById('rwo').textContent=wrong.length;
+  document.getElementById('rpt').textContent=pct+'%';
+  document.getElementById('wrongRev').innerHTML=wrong.length?`<div class="tc"><div style="font-size:13px;font-weight:700;margin-bottom:8px">❌ गलत उत्तर — Review</div>${wrong.map(q=>`<div style="background:var(--red2);border-radius:9px;padding:9px;margin-bottom:6px;border-left:3px solid #EF9A9A"><div style="font-size:12.5px;font-weight:600">${esc(q.q)}</div><div style="font-size:12px;color:var(--g);font-weight:600;margin-top:3px">✅ ${q.ans}) ${esc(q[q.ans.toLowerCase()]||'')}</div>${q.exp?'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+esc(q.exp)+'</div>':''}</div>`).join('')}</div>`:'';
+  const u=db.users.find(x=>x.id===CU.id);
+  if(u){if(!u.stats)u.stats={q:0,t:0,best:0};u.stats.t++;if(pct>u.stats.best)u.stats.best=pct;}
+  db.stats.testsToday++;saveDB();updateSStats();
+  logAct('test-done',CU.name,CU.class||'',CU.name+' ने Test पूरा किया — '+score+'/'+total+'('+pct+'%)','✅','#E8F9EE');
+  if(db.activityLog[db.activityLog.length-1])db.activityLog[db.activityLog.length-1].subject=testSt.subj;
+}
+
+function saveScore(){
+  const{score,qs}=testSt;const pct=Math.round(score/qs.length*100);
+  db.leaderboard.push({id:Date.now(),name:CU.name,class:CU.class||'',score,total:qs.length,pct,subject:testSt.subj,date:nd(),color:rclr()});
+  saveDB();renderLB();renderPastT();
+  sTab('rank',document.querySelectorAll('.stab')[3]);toast('🏆 Score save हो गया!');
+}
+
+function resetTest(){
+  document.getElementById('tResult').style.display='none';
+  document.getElementById('tSetup').style.display='block';
+  renderPastT();
+}
+
+function renderPastT(){
+  const el=document.getElementById('pastT');if(!el)return;
+  const my=db.leaderboard.filter(e=>e.name===CU.name);
+  if(!my.length){el.innerHTML='<div class="empty"><div class="ei">📋</div><p>अभी कोई test नहीं</p></div>';return;}
+  el.innerHTML=my.slice().reverse().slice(0,5).map(e=>`
+    <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:13px;font-weight:600">${esc(e.subject)} Test</div><div style="font-size:10.5px;color:var(--muted)">${e.date}</div></div>
+      <div style="text-align:right"><div style="font-size:14px;font-weight:800;color:var(--s)">${e.pct}%</div><div style="font-size:10.5px;color:var(--muted)">${e.score}/${e.total}</div></div>
+    </div>`).join('');
+}
+
+/* Notes */
+function renderNotes(filter=''){
+  const area=document.getElementById('notesArea');if(!area)return;
+  let notes=[...db.notes];
+  if(filter)notes=notes.filter(n=>(n.subject+n.title+n.body).toLowerCase().includes(filter.toLowerCase()));
+  if(!notes.length){area.innerHTML='<div class="empty"><div class="ei">📖</div><p>'+(filter?'कोई note नहीं मिला':'Teacher जल्द notes add करेंगे')+'</p></div>';return;}
+  const subjs=[...new Set(notes.map(n=>n.subject))];
+  area.innerHTML=subjs.map(s=>`
+    <div style="font-size:10.5px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.5px;padding:4px 2px 7px">📚 ${esc(s)}</div>
+    ${notes.filter(n=>n.subject===s).map(n=>`
+      <div class="nc">
+        <div class="nt">${esc(n.title)}</div>
+        <div class="nb2">${esc(n.body)}</div>
+        <div class="nm">📅 ${n.date} • 👤 ${esc(n.teacher||'Teacher')}</div>
+      </div>`).join('')}`).join('');
+}
+function filterNotes(q){renderNotes(q);}
+
+/* LB */
+function renderLB(){
+  const lb=[...db.leaderboard].sort((a,b)=>b.pct-a.pct);
+  const seen={};const uniq=lb.filter(e=>{if(!seen[e.name]){seen[e.name]=true;return true;}return false;});
+  const mi=uniq.findIndex(e=>e.name===CU.name);
+  const u=db.users.find(x=>x.id===CU.id);
+  const rk=document.getElementById('myRnk');const bs=document.getElementById('myBst');const ts=document.getElementById('totStu');
+  if(rk)rk.textContent=mi>=0?'#'+(mi+1):'-';
+  if(bs)bs.textContent=(u?.stats?.best||0)+'%';
+  if(ts)ts.textContent=db.users.filter(u=>u.role==='student').length;
+  const icons=['🥇','🥈','🥉'];const rc=['g1','g2','g3'];
+  const area=document.getElementById('lbArea');if(!area)return;
+  area.innerHTML=uniq.length?uniq.map((e,i)=>`
+    <div class="lbrow ${rc[i]||''} ${e.name===CU.name?'me':''}">
+      <div class="lbrk">${i<3?icons[i]:'#'+(i+1)}</div>
+      <div class="lbav" style="background:${e.color||'#FF6B00'}">${e.name.charAt(0)}</div>
+      <div style="flex:1"><div class="lbnm">${esc(e.name)}${e.name===CU.name?' <span style="font-size:9.5px;color:var(--g)">← आप</span>':''}</div><div style="font-size:10.5px;color:var(--muted)">${esc(e.class)} • ${esc(e.subject)}</div></div>
+      <div class="lbsc">${e.pct}%</div>
+    </div>`).join(''):'<div class="empty"><div class="ei">🏆</div><p>Test दें और rank पाएं!</p></div>';
+}
+
+/* Profile */
+function loadSProf(){
+  const u=db.users.find(x=>x.id===CU.id);if(!u)return;
+  const pn=document.getElementById('spn');const pc=document.getElementById('spc');const pg=document.getElementById('spg');
+  if(pn)pn.value=u.name||'';
+  if(pc&&u.class)pc.value=u.class;
+  if(pg)pg.value=u.goal||'';
+}
+function saveSProf(){
+  const u=db.users.find(x=>x.id===CU.id);if(!u)return;
+  const n=(document.getElementById('spn')||{}).value?.trim();
+  if(n)u.name=n;
+  u.class=(document.getElementById('spc')||{}).value||u.class;
+  u.goal=(document.getElementById('spg')||{}).value?.trim()||'';
+  saveDB();CU=u;document.getElementById('snbadge').textContent=u.name;
+  toast('✅ Profile saved!');
+}
+function updateSStats(){
+  const u=db.users.find(x=>x.id===CU.id);
+  const sq=document.getElementById('stQ');const st=document.getElementById('stT');const sb=document.getElementById('stB');
+  if(!u||!u.stats)return;
+  if(sq)sq.textContent=u.stats.q||0;
+  if(st)st.textContent=u.stats.t||0;
+  if(sb)sb.textContent=(u.stats.best||0)+'%';
+}
+</script>
+</body>
+</html>
+/* 🔊 GLOBAL VOICE SYSTEM */
+function speakText(text) {
+  try {
+    if (!('speechSynthesis' in window)) {
+      console.warn("TTS not supported");
+      return;
+    }
+
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = "hi-IN"; // Hindi voice
+    msg.rate = 1;
+    msg.pitch = 1;
+
+    // Stop previous speech
+    window.speechSynthesis.cancel();
+
+    // Speak
+    window.speechSynthesis.speak(msg);
+
+  } catch (e) {
+    console.error("Voice error:", e);
+  }
+}
