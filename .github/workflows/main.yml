@@ -27,17 +27,18 @@ jobs:
         run: npm install -g cordova
 
       - name: Install Android SDK
-        run: |
-          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-            "platforms;android-33" \
-            "build-tools;33.0.2" \
-            "platform-tools" 2>/dev/null | tail -3
+        run: echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.2" "platform-tools" 2>/dev/null | tail -3
 
       - name: Create Cordova Project
+        run: cordova create PathshalaApp com.chaudhary.pathshala "Chaudhary Pathshala AI"
+
+      - name: Copy project files
         run: |
-          cordova create PathshalaApp com.chaudhary.pathshala "Chaudhary Pathshala AI"
           cp config.xml PathshalaApp/config.xml
           cp -r www/* PathshalaApp/www/
+
+      - name: Add Android platform and plugins
+        run: |
           cd PathshalaApp
           cordova platform add android
           cordova plugin add cordova-plugin-inappbrowser
@@ -46,21 +47,17 @@ jobs:
       - name: Build APK
         run: |
           cd PathshalaApp
-          cordova build android --release -- \
-            --keystore=../android.keystore \
-            --storePassword=pathshala123 \
-            --alias=pathshala \
-            --password=pathshala123 || \
           cordova build android
 
-      - name: Find APK
+      - name: Copy APK to output
         run: |
-          find PathshalaApp -name "*.apk" -type f 2>/dev/null
+          mkdir -p output
+          find PathshalaApp -name "*.apk" -type f -exec cp {} output/ \;
+          ls -la output/
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ChaudharyPathshala-APK
-          path: |
-            PathshalaApp/platforms/android/app/build/outputs/apk/**/*.apk
+          path: output/
           retention-days: 30
