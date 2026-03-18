@@ -4,6 +4,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,42 +15,65 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Node.js
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Cordova
-        run: npm install -g cordova
+        run: npm install -g cordova@12
 
-      - name: Install Android SDK
-        run: echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.2" "platform-tools" 2>/dev/null | tail -3
+      - name: Install Android SDK components
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+            "platforms;android-33" \
+            "build-tools;33.0.2" \
+            "platform-tools" \
+            "extras;android;m2repository" \
+            "extras;google;m2repository" 2>/dev/null | grep -v "^\[" || true
 
-      - name: Create Cordova Project
-        run: cordova create PathshalaApp com.chaudhary.pathshala "Chaudhary Pathshala AI"
+      - name: Create Cordova project
+        run: |
+          cordova create PathshalaApp com.chaudhary.pathshala "Chaudhary Pathshala AI"
+          echo "Project created"
 
-      - name: Copy project files
+      - name: Copy config and www files
         run: |
           cp config.xml PathshalaApp/config.xml
-          cp -r www/* PathshalaApp/www/
+          cp -r www/. PathshalaApp/www/
+          echo "Files copied"
+          ls PathshalaApp/www/
 
-      - name: Add Android platform and plugins
+      - name: Add Android platform
         run: |
           cd PathshalaApp
-          cordova platform add android
-          cordova plugin add cordova-plugin-inappbrowser
-          cordova plugin add cordova-plugin-whitelist
+          cordova platform add android@12 --save
+          echo "Platform added"
 
-      - name: Build APK
+      - name: Add plugins
         run: |
           cd PathshalaApp
-          cordova build android
+          cordova plugin add cordova-plugin-inappbrowser --save
+          cordova plugin add cordova-plugin-whitelist --save
+          echo "Plugins added"
+
+      - name: Build Debug APK
+        run: |
+          cd PathshalaApp
+          export JAVA_HOME=$JAVA_HOME_17_X64
+          cordova build android --debug --verbose 2>&1 | tail -30
+
+      - name: Find APK files
+        run: |
+          echo "=== Finding APK files ==="
+          find PathshalaApp -name "*.apk" -type f 2>/dev/null
+          echo "=== Done ==="
 
       - name: Copy APK to output
         run: |
